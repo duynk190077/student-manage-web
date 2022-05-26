@@ -14,7 +14,7 @@ export default interface Student {
   image?: string;
 }
 
-export const defaultStuden: Student = {
+export const defaultStudent: Student = {
   id: '',
   user: '',
   fullName: '',

@@ -5,6 +5,7 @@ import Teachers from '../component/admin/Teacher/index';
 import EditTeacher from '../component/admin/Teacher/EditTeacher';
 import Class from '../component/admin/Class';
 import UpdateProfile from '../component/student/UpdateProfile';
+import ChangePassword from '../component/user/ChangePassword';
 import {
   GridRowsProp,
   GridColDef,
@@ -40,6 +41,11 @@ export const PUCLIC_PAGES: IRoute[] = [
   {
     component: UpdateProfile,
     path: '/Students/UpdateProfile',
+    exact: true,
+  },
+  {
+    component: ChangePassword,
+    path: '/Users/ChangePassword',
     exact: true,
   },
 ];

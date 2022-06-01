@@ -1,10 +1,7 @@
 import { makeStyles } from '@mui/styles';
 import {
   Box,
-  Button,
-  Stack,
   Typography,
-  ButtonGroup,
   List,
   ListItemButton,
   ListItemText,
@@ -12,12 +9,16 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Link, useHistory } from 'react-router-dom';
-import { memo, MouseEvent, useState } from 'react';
+import { memo, SyntheticEvent, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import clsx from 'clsx';
 
 import LOGO2 from './img/LOGO2.png';
 import Avatars from '../../component/admin/img/Avatars.jpg';
+import axios from 'axios';
+import { BASE_URL } from '../../constant';
+import { actions, useStore } from '../../store';
+import { initState } from '../../store/reducer';
 const menuList = [
   {
     name: 'Trang chủ',
@@ -41,16 +42,36 @@ const menuList = [
   },
 ];
 
-const TooltipUser = () => {
+const TooltipUser = (props: any) => {
+  const history = useHistory();
+  console.log(props.id);
   return (
     <List>
-      <ListItemButton component={Link} to="/Students/updateProfile">
+      <ListItemButton component={Link} to="/Students/UpdateProfile">
         Cập nhật thông tin cá nhân
       </ListItemButton>
-      <ListItemButton component={Link} to="/Students/changePassword">
+      <ListItemButton component={Link} to="/Users/ChangePassword">
         Đổi mật khẩu
       </ListItemButton>
-      <ListItemButton component={Link} to="/Users/Logout">
+      <ListItemButton
+        onClick={(e: SyntheticEvent) => {
+          e.preventDefault();
+          axios({
+            method: 'post',
+            url: `${BASE_URL}/users/logout`,
+            data: {
+              id: props.id,
+            },
+          }).then((respone) => {
+            if (respone.data?.error === undefined) {
+              props.dispatch(actions.setState(initState));
+              localStorage.clear();
+              history.push('/login');
+              history.go(0);
+            }
+          });
+        }}
+      >
         Đăng xuất
       </ListItemButton>
     </List>
@@ -59,12 +80,13 @@ const TooltipUser = () => {
 
 function Header() {
   const classes = useStyles();
-  const history = useHistory();
+  const [state, dispatch] = useStore();
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index);
   };
+
   return (
     <header className={classes.header}>
       <Box className={classes.grid}>
@@ -94,7 +116,11 @@ function Header() {
                 );
               })}
             </List>
-            <Tooltip title={<TooltipUser />} placement="bottom" arrow>
+            <Tooltip
+              title={<TooltipUser id={state.userId} dispatch={dispatch} />}
+              placement="bottom"
+              arrow
+            >
               <Box className={classes.menu}>
                 <Avatar
                   src={Avatars}

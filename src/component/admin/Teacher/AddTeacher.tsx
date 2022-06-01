@@ -1,4 +1,4 @@
-import { memo, useState, ChangeEvent } from 'react';
+import { memo, useState, ChangeEvent, useEffect } from 'react';
 import {
   Box,
   TextField,
@@ -14,16 +14,20 @@ import axios from 'axios';
 
 import Teacher from '../../../interfaces/Teacher';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
-import { BASE_URL, listGender, listSubJect } from '../../../constant';
+import { BASE_URL, listGender } from '../../../constant';
 import {
   validateName,
   validateEmail,
   validatePhoneNumber,
+  authHeader,
 } from '../../shared/helper';
 import CusTextField from '../../shared/TextField';
+import { useStore, actions } from '../../../store';
+import { initState } from '../../../store/reducer';
 
 function AddTeacher() {
   const classes = useStyle();
+  const [state, dispatch] = useStore();
   const [teacher, setTeacher] = useState<Teacher>({
     firstName: '',
     lastName: '',
@@ -32,6 +36,21 @@ function AddTeacher() {
     dateofBirth: null,
     email: '',
     subject: '',
+  });
+
+  useEffect(() => {
+    if (state.listSubject.length === 0) {
+      axios
+        .get(`${BASE_URL}/subjects`, { headers: authHeader() })
+        .then((respone) => {
+          const subjects = respone.data;
+          dispatch(
+            actions.setListSubject({
+              listSubject: subjects.map((p: { name: any }) => p.name),
+            }),
+          );
+        });
+    }
   });
 
   const handleChangeInput =
@@ -100,8 +119,8 @@ function AddTeacher() {
                 Giới tính:
               </Typography>
               <TextField
+                className={classes.textField}
                 select
-                label="Giới tính"
                 value={teacher.gender}
                 onChange={handleChangeInput('gender')}
                 sx={{ width: '80%' }}
@@ -124,12 +143,15 @@ function AddTeacher() {
               </Typography>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <DesktopDatePicker
-                  label="Ngày sinh"
                   inputFormat="dd/MM/yyyy"
                   value={teacher.dateofBirth}
                   onChange={handleChangeDate}
                   renderInput={(params) => (
-                    <TextField {...params} sx={{ width: '80%' }} />
+                    <TextField
+                      className={classes.textField}
+                      {...params}
+                      sx={{ width: '80%' }}
+                    />
                   )}
                 />
               </LocalizationProvider>
@@ -178,13 +200,13 @@ function AddTeacher() {
                 Môn giảng dạy:
               </Typography>
               <TextField
+                className={classes.textField}
                 select
-                label="Môn học"
                 value={teacher.subject}
                 onChange={handleChangeInput('subject')}
                 sx={{ width: '80%' }}
               >
-                {listSubJect.map((option) => (
+                {state.listSubject.map((option: any) => (
                   <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>
@@ -208,6 +230,14 @@ const useStyle = makeStyles({
   wrapForm: {
     display: 'flex',
     alignItems: 'center',
+  },
+  textField: {
+    '& .MuiOutlinedInput-input': {
+      padding: '10px 14px',
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '0',
+    },
   },
 });
 

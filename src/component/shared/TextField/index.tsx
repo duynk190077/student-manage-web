@@ -9,7 +9,6 @@ function CusTextField(props: any) {
   return (
     <TextField
       className={classes.textField}
-      label={props.label}
       value={props.value}
       onChange={props.onChange}
       error={focused && blured ? props?.validate?.status : false}
@@ -32,6 +31,12 @@ const useStyle = makeStyles({
   textField: {
     '& .MuiFormHelperText-root': {
       animation: 'FadeOut linear 2s 3s forwards ',
+    },
+    '& .MuiOutlinedInput-input': {
+      padding: '10px 14px',
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '0',
     },
   },
 });

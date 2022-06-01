@@ -8,23 +8,17 @@ import DetailStudent from './detailStudent';
 import avatarStudent from './img/avatarStudent.png';
 import DetailPersonal from './detailPersonal';
 import { BASE_URL } from '../../constant';
-import { GetIdFromStroage } from '../shared/helper';
+import { useStore } from '../../store';
 
 export default function Home() {
   const classes = useStyles();
-  const [student, setStudent] = useState<any>();
-
-  useEffect(() => {
-    const id = GetIdFromStroage();
-    axios
-      .get(`${BASE_URL}/students/${id}`)
-      .then((respone) => setStudent(respone.data));
-  }, []);
+  const [state, dispatch] = useStore();
+  const student = state.userInfo;
   return (
     <>
       <Header />
-      <Box className={classes.container}>
-        <Box className={classes.mainTitle}>
+      <Box className="container">
+        <Box className="mainTitle">
           <Typography variant="h3">THÔNG TIN CÁ NHÂN</Typography>
           <hr></hr>
         </Box>
@@ -57,29 +51,6 @@ export default function Home() {
 }
 
 const useStyles = makeStyles({
-  mainTitle: {
-    width: '100%',
-    padding: '5px',
-    textAlign: 'center',
-    '& h3': {
-      fontWeight: '500',
-      textTransform: 'uppercase',
-      fontSize: '24px',
-    },
-    '& hr': {
-      margin: '20px 0',
-      border: '0',
-      borderTop: '1px solid #eee',
-    },
-  },
-  container: {
-    width: '1200px',
-    verticalAlign: 'top',
-    margin: 'auto',
-    padding: '20px',
-    backgroundColor: '#fff',
-    marginTop: '20px',
-  },
   avatarStudent: {
     maxWidth: '60%',
     display: 'inline-block',

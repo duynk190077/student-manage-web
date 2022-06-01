@@ -14,15 +14,17 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, SyntheticEvent } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 
 import LOGO from './img/LOGO.png';
 import { BASE_URL, roles } from '../../constant';
+import { useStore, actions } from '../../store';
 
 export default function Login() {
   const classes = useStyles();
+  const [state, dispatch] = useStore();
   const [role, setRole] = useState<string>(roles[0].name);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -33,18 +35,26 @@ export default function Login() {
     setRole((event.target as HTMLInputElement).value);
   };
 
-  const handleLogin = () => {
+  const handleLogin = (event: SyntheticEvent) => {
+    event.preventDefault();
     axios
       .post(`${BASE_URL}/users/login`, { username, password, role })
       .then((respone) => {
         if (respone.data?.error === undefined) {
-          localStorage.setItem('id', respone.data.id);
-          localStorage.setItem('access_token', respone.data.access_token);
+          dispatch(
+            actions.setState({
+              ...respone.data,
+              role: role,
+            }),
+          );
+          localStorage.setItem('access_token', respone.data.accessToken);
           history.push('/');
-          history.go(0);
         } else setError(respone.data.error);
       });
   };
+
+  console.log(state);
+
   return (
     <Box className={classes.container}>
       <Box className={classes.wrapLogin}>

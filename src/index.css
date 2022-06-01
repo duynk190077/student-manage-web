@@ -49,6 +49,33 @@ hr {
   border-top: 1px solid #eee;
 }
 
+.container {
+  width: 1200px;
+  vertical-align: top;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  margin-top: 20px;
+}
+
+.mainTitle {
+  width: 100%;
+  padding: 5px;
+  text-align: center;
+}
+
+.mainTitle h3 {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 24px;
+}
+
+.mainTitle hr {
+  margin: 20px 0;
+  border: 0;
+  border-top: 1px solid #eee;
+}
+
 .col-md-2 {
   width: 16.66667%;
 }

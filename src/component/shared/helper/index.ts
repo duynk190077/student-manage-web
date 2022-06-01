@@ -32,3 +32,10 @@ export const GetTokenFromStroage = () => {
 export const GetIdFromStroage = () => {
   return localStorage.getItem('id');
 };
+
+export const authHeader = () => {
+  const token = GetTokenFromStroage();
+  return {
+    Authorization: 'Bearer ' + token,
+  };
+};

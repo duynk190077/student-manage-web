@@ -22,8 +22,7 @@ import {
   authHeader,
 } from '../../shared/helper';
 import CusTextField from '../../shared/TextField';
-import { useStore, actions } from '../../../store';
-import { initState } from '../../../store/reducer';
+import { useStore } from '../../../store';
 
 function AddTeacher() {
   const classes = useStyle();
@@ -36,21 +35,6 @@ function AddTeacher() {
     dateofBirth: null,
     email: '',
     subject: '',
-  });
-
-  useEffect(() => {
-    if (state.listSubject.length === 0) {
-      axios
-        .get(`${BASE_URL}/subjects`, { headers: authHeader() })
-        .then((respone) => {
-          const subjects = respone.data;
-          dispatch(
-            actions.setListSubject({
-              listSubject: subjects.map((p: { name: any }) => p.name),
-            }),
-          );
-        });
-    }
   });
 
   const handleChangeInput =

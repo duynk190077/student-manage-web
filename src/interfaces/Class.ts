@@ -1,5 +1,12 @@
-export default interface Class {
+export default interface Classroom {
   id?: string;
   name: string;
-  teacherName: string;
+  teacher: string;
+  totalStudent: number;
+}
+
+export const defaultClassroom: Classroom = {
+  name: '',
+  teacher: '',
+  totalStudent: 0
 }

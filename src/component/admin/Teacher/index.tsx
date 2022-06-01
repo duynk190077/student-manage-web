@@ -64,7 +64,7 @@ function Teachers() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3000/teachers?_filter&gender=Nam&subject=Toán')
+      .get(`${BASE_URL}/teachers`)
       .then((respone) => {
         setTeachers(respone.data);
       });

@@ -7,7 +7,6 @@ import Class from '../component/admin/Class';
 import UpdateProfile from '../component/student/UpdateProfile';
 import ChangePassword from '../component/user/ChangePassword';
 import {
-  GridRowsProp,
   GridColDef,
   GridValueGetterParams,
 } from '@mui/x-data-grid';
@@ -55,15 +54,21 @@ export const teacherColumns: GridColDef[] = [
   { field: 'firstName', headerName: 'FirstName', width: 150 },
   { field: 'lastName', headerName: 'LastName', width: 100 },
   {
-    field: 'fullname',
+    field: 'fullName',
     headerName: 'FullName',
     sortable: false,
     width: 170,
     valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.firstname || ''} ${params.row.lastname || ''}`,
+      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   },
   { field: 'gender', headerName: 'Gender', width: 70 },
-  { field: 'dateofBirth', headerName: 'Date of Birth', width: 120 },
+  { 
+    field: 'dateofBirth', 
+    type: 'dateTime',
+    headerName: 'Date of Birth', 
+    width: 120,
+    valueGetter: ({ value }) => value && new Date(value).toLocaleDateString()
+  },
   { field: 'email', headerName: 'Email', width: 200 },
   { field: 'subject', headerName: 'SubJect', width: 100 },
   { field: 'class', headerName: 'Class', width: 100 },
@@ -71,24 +76,9 @@ export const teacherColumns: GridColDef[] = [
 
 export const classColumns: GridColDef[] = [
   //{field: 'id', headerName: 'ID', width: 100},
-  { field: 'name', headerName: 'Name', width: 100 },
-  { field: 'teacher', headerName: 'Teacher', width: 200 },
-  { field: 'student', headerName: 'Student', width: 200 },
-];
-
-export const classRows: GridRowsProp = [
-  {
-    id: 1,
-    name: '10A1',
-    teacher: 'Nguyễn Khương Duy',
-    student: 40,
-  },
-  {
-    id: 2,
-    name: '10A2',
-    teacher: 'Trần Thị Huyền Trang',
-    student: 39,
-  },
+  { field: 'name', headerName: 'Tên lớp', width: 100 },
+  { field: 'teacher', headerName: 'Giáo viên chủ nhiệm', width: 200 },
+  { field: 'totalStudent', headerName: 'Tổng số học sinh', width: 200 },
 ];
 
 export const listProperty = ['SubJect', 'Gender'];

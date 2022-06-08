@@ -10,6 +10,7 @@ import {
   GridColDef,
   GridValueGetterParams,
 } from '@mui/x-data-grid';
+import DetailClass from '../component/admin/Class/DetailClass';
 
 export const PUCLIC_PAGES: IRoute[] = [
   {
@@ -47,6 +48,11 @@ export const PUCLIC_PAGES: IRoute[] = [
     path: '/Users/ChangePassword',
     exact: true,
   },
+  {
+    component: DetailClass,
+    path: '/Class/:id',
+    exact: true,
+  }
 ];
 
 export const teacherColumns: GridColDef[] = [
@@ -80,6 +86,31 @@ export const classColumns: GridColDef[] = [
   { field: 'teacher', headerName: 'Giáo viên chủ nhiệm', width: 200 },
   { field: 'totalStudent', headerName: 'Tổng số học sinh', width: 200 },
 ];
+
+export const teachingColumns: GridColDef[] = [
+  { field: 'subject', headerName: 'Môn học', width: 100},
+  { field: 'teacher', headerName: 'Giáo viên', width: 200},
+]
+
+export const studentColumns: GridColDef[] = [
+  {
+    field: 'fullName',
+    headerName: 'Họ và tên',
+    sortable: false,
+    width: 170,
+    valueGetter: (params: GridValueGetterParams) =>
+      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
+  },
+  { field: 'gender', headerName: 'Giới tính', width: 70 },
+  { 
+    field: 'dateofBirth', 
+    type: 'dateTime',
+    headerName: 'Ngày sinh', 
+    width: 120,
+    valueGetter: ({ value }) => value && new Date(value).toLocaleDateString()
+  },
+  { field: 'phoneNumber', headerName: 'Số điện thoại', width: 150},
+]
 
 export const listProperty = ['SubJect', 'Gender'];
 

@@ -1,15 +1,17 @@
 import { Box, Typography, Button } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams, } from '@mui/x-data-grid';
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import { authHeader } from '../../shared/helper';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import { BASE_URL, classColumns } from '../../../constant';
-import Classroom, { defaultClassroom } from '../../../interfaces/Class';
+import Classroom from '../../../interfaces/Class';
+import { useHistory } from 'react-router-dom';
 
 function Class() {
-  const [classes, setClasses] = useState<Classroom[]>([]);
+  const history = useHistory();
+  const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const actionColumn: GridColDef[] = [
     {
       field: 'action',
@@ -21,6 +23,7 @@ function Class() {
             <Button
               variant="outlined"
               sx={{ mr: 1 }}
+              onClick={() => handleLinkClick(params.row.id)}
             >
               View
             </Button>
@@ -39,12 +42,15 @@ function Class() {
   useEffect(() => {
     async function fetchAPI() {
       const respone = await axios.get(`${BASE_URL}/classrooms`, { headers: authHeader() });
-      console.log(respone.data);
-      setClasses(respone.data);
+      setClassrooms(respone.data);
     }
 
     fetchAPI();
   }, [])
+
+  const handleLinkClick = (name: string) => {
+    history.push(`/Class/${name}`);
+  }
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -52,10 +58,12 @@ function Class() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Typography variant="h4" sx={{mb: 3}}>Danh sách lớp</Typography>
-
+        <Button variant="contained" sx={{mb: 3}} onClick={() => handleLinkClick('Add')}>
+          Thêm lớp mới
+        </Button>
         <Box sx={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={classes}
+            rows={classrooms}
             columns={classColumns.concat(actionColumn)}
             pageSize={5}
             rowsPerPageOptions={[5]}

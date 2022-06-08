@@ -8,3 +8,14 @@ export default interface Teacher {
   email: string;
   subject: string;
 }
+
+export const defaultTeacher: Teacher = {
+  id: '',
+  firstName: '',
+  lastName: '',
+  gender: '',
+  dateofBirth: null,
+  phoneNumber: '',
+  email: '',
+  subject: '',
+}

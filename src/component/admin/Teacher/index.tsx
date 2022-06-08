@@ -126,7 +126,6 @@ function Teachers() {
     history.push(`/Teacher/${name}`);
   };
   const handleDeleteAction = async (id: string) => {
-    console.log('hello');
     await axios.delete(`${BASE_URL}/teachers/${id}`);
     let data: Teacher[] = teachers;
     data = data.filter((element) => element.id !== id);

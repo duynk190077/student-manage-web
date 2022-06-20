@@ -18,4 +18,4 @@ export const defaultTeacher: Teacher = {
   phoneNumber: '',
   email: '',
   subject: '',
-}
+};

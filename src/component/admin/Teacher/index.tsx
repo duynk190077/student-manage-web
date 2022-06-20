@@ -63,11 +63,9 @@ function Teachers() {
   ];
 
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/teachers`)
-      .then((respone) => {
-        setTeachers(respone.data);
-      });
+    axios.get(`${BASE_URL}/teachers`).then((respone) => {
+      setTeachers(respone.data);
+    });
   }, []);
 
   const autoCompleteProps = (arr: string[]) => {

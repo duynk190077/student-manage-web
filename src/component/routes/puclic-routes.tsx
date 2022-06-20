@@ -9,15 +9,21 @@ import { useEffect } from 'react';
 async function initState(state: any, dispatch: any) {
   try {
     if (state.userId === '') {
-      const respone = await axios.get(`${BASE_URL}/users/user-info`, { headers: authHeader() });
+      const respone = await axios.get(`${BASE_URL}/users/user-info`, {
+        headers: authHeader(),
+      });
       dispatch(actions.setState(respone.data));
     }
     if (!state.listSubject.length) {
-      const respone = await axios.get(`${BASE_URL}/subjects`, { headers: authHeader() });
+      const respone = await axios.get(`${BASE_URL}/subjects`, {
+        headers: authHeader(),
+      });
       const subjects = respone.data;
-      dispatch(actions.setListSubject({
-        listSubject: subjects.map((p : { name: any }) => p.name)
-      }))
+      dispatch(
+        actions.setListSubject({
+          listSubject: subjects.map((p: { name: any }) => p.name),
+        }),
+      );
     }
   } catch (error) {
     throw error;
@@ -31,7 +37,7 @@ const UserUrl = () => {
     if (auth) {
       initState(state, dispatch);
     }
-  }, [])
+  }, []);
 
   const publicR = PUCLIC_PAGES.map((p) => {
     const Component = p.component;

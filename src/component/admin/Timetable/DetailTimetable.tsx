@@ -97,22 +97,28 @@ function DetailTimetable() {
 
     const handleUpdateTimetable = async (event: SyntheticEvent) => {
         event.preventDefault();
-        const respone = await axios({
-            method: 'put',
-            url: `${BASE_URL}/timetables/${id}`,
-            headers: authHeader(),
-            data: {
-                ...timetable
-            }
-        })
 
-        if (respone.data !== false) {
-            alert('Cập nhật thời khóa biểu thành công');
-            //setTimetable(defaultTimetable);
-        }
+        if (timetable.semester === '') alert('Không được để trống')
         else {
-            alert('Cập nhật thời khóa biểu thất bại')
+
+            const respone = await axios({
+                method: 'put',
+                url: `${BASE_URL}/timetables/${id}`,
+                headers: authHeader(),
+                data: {
+                    ...timetable
+                }
+            })
+    
+            if (respone.data !== false) {
+                alert('Cập nhật thời khóa biểu thành công');
+                //setTimetable(defaultTimetable);
+            }
+            else {
+                alert('Cập nhật thời khóa biểu thất bại')
+            }
         }
+
     }
 
     useEffect(() => {

@@ -1,5 +1,5 @@
 import { Box, Typography, Button } from '@mui/material';
-import { DataGrid, GridColDef, GridValueGetterParams, } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -27,10 +27,7 @@ function Class() {
             >
               View
             </Button>
-            <Button
-              variant="outlined"
-              sx={{ color: '#ef5050' }}
-            >
+            <Button variant="outlined" sx={{ color: '#ef5050' }}>
               Delete
             </Button>
           </Box>
@@ -41,24 +38,32 @@ function Class() {
 
   useEffect(() => {
     async function fetchAPI() {
-      const respone = await axios.get(`${BASE_URL}/classrooms`, { headers: authHeader() });
+      const respone = await axios.get(`${BASE_URL}/classrooms`, {
+        headers: authHeader(),
+      });
       setClassrooms(respone.data);
     }
 
     fetchAPI();
-  }, [])
+  }, []);
 
   const handleLinkClick = (name: string) => {
     history.push(`/Class/${name}`);
-  }
+  };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <AdminDrawer name="Class" />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        <Typography variant="h4" sx={{mb: 3}}>Danh sách lớp</Typography>
-        <Button variant="contained" sx={{mb: 3}} onClick={() => handleLinkClick('Add')}>
+        <Typography variant="h4" sx={{ mb: 3 }}>
+          Danh sách lớp
+        </Typography>
+        <Button
+          variant="contained"
+          sx={{ mb: 3 }}
+          onClick={() => handleLinkClick('Add')}
+        >
           Thêm lớp mới
         </Button>
         <Box sx={{ height: 400, width: '100%' }}>

@@ -132,7 +132,7 @@ function AdminDrawer(props: any) {
   };
 
   const handleOnClick = (name: string) => {
-    history.push(`/${name}`);
+    history.push(`/admin/${name}`);
   };
   return (
     <>

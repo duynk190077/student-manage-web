@@ -10,5 +10,5 @@ export const defaultClassroom: Classroom = {
   name: '',
   teacher: '',
   students: [],
-  totalStudent: 0
-}
+  totalStudent: 0,
+};

@@ -16,7 +16,7 @@ import axios from 'axios';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import Avatars from '../img/Avatars.jpg';
 import Teacher from '../../../interfaces/Teacher';
-import { listGender, listSubJect, listClass } from '../../../constant';
+import { listGender, listSubJect } from '../../../constant';
 import ParamTypes from '../../../interfaces/ParamTypes';
 import { BASE_URL } from '../../../constant';
 

@@ -37,7 +37,7 @@ const UserUrl = () => {
     if (auth) {
       initState(state, dispatch);
     }
-  }, []);
+  }, [auth, state, dispatch]);
 
   const publicR = PUCLIC_PAGES.map((p) => {
     const Component = p.component;

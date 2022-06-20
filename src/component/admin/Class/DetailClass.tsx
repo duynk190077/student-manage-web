@@ -6,14 +6,12 @@ import {
   DialogTitle,
   DialogActions,
   DialogContent,
-  DialogContentText,
   Autocomplete,
   TextField,
 } from '@mui/material';
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { makeStyles } from '@mui/styles';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 import Classroom, { defaultClassroom } from '../../../interfaces/Class';
@@ -172,7 +170,7 @@ function DetailClass() {
     return function cleanup() {
       source.cancel();
     };
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     const fetchTeaching = async () => {

@@ -141,7 +141,7 @@ function DetailTimetable() {
     };
 
     fetchAPI();
-  }, []);
+  }, [id]);
   return (
     <Box sx={{ display: 'flex' }}>
       <AdminDrawer name="Timetable" />

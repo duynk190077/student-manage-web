@@ -25,10 +25,11 @@ import {
   BASE_URL,
 } from '../../../constant';
 import Teacher from '../../../interfaces/Teacher';
+import { authHeader } from '../../shared/helper';
 
 function Teachers() {
   const [teachers, setTeachers] = useState<any>([]);
-  const [subJect, setSubJect] = useState<string | null>('');
+  const [subject, setSubject] = useState<string | null>('');
   const [gender, setGender] = useState<string | null>('');
   const [open, setOpen] = useState<boolean>(false);
   const [idSelected, setIdSelected] = useState<string | ''>('');
@@ -63,9 +64,16 @@ function Teachers() {
   ];
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/teachers`).then((respone) => {
+    const fetchAPI = async() => {
+      const respone = await axios({
+        method: 'get',
+        url: `${BASE_URL}/teachers`,
+        headers: authHeader(),
+      })
       setTeachers(respone.data);
-    });
+    }
+
+    fetchAPI();
   }, []);
 
   const autoCompleteProps = (arr: string[]) => {
@@ -80,7 +88,7 @@ function Teachers() {
 
   const setProps = (name: string) => {
     switch (name) {
-      case 'SubJect': {
+      case 'Subject': {
         return subJectProps;
       }
       default: {
@@ -90,8 +98,8 @@ function Teachers() {
   };
   const setValueOption = (name: string, value: string | null) => {
     switch (name) {
-      case 'SubJect': {
-        setSubJect(value);
+      case 'Subject': {
+        setSubject(value);
         break;
       }
       default: {
@@ -112,8 +120,8 @@ function Teachers() {
 
   const handleFilterClick = () => {
     let data: Teacher[] = teachers;
-    if (subJect) {
-      data = data.filter((element) => element.subject === subJect);
+    if (subject) {
+      data = data.filter((element) => element.subject === subject);
     }
     if (gender) {
       data = data.filter((element) => element.gender === gender);
@@ -169,7 +177,7 @@ function Teachers() {
         </Stack>
         <div style={{ height: 400, width: '100%' }}>
           <DataGrid
-            rows={teachers}
+            rows={filterTeacherRows}
             columns={teacherColumns.concat(actionColumn)}
             pageSize={5}
             rowsPerPageOptions={[5]}

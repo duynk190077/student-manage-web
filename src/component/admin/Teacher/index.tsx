@@ -64,14 +64,14 @@ function Teachers() {
   ];
 
   useEffect(() => {
-    const fetchAPI = async() => {
+    const fetchAPI = async () => {
       const respone = await axios({
         method: 'get',
         url: `${BASE_URL}/teachers`,
         headers: authHeader(),
-      })
+      });
       setTeachers(respone.data);
-    }
+    };
 
     fetchAPI();
   }, []);

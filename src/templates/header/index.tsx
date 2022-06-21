@@ -9,14 +9,14 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Link, useHistory } from 'react-router-dom';
-import { memo, SyntheticEvent, useState } from 'react';
+import { memo, SyntheticEvent, useMemo, useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import clsx from 'clsx';
 
 import LOGO2 from './img/LOGO2.png';
-import Avatars from '../../component/admin/img/Avatars.jpg';
+import Avatars from '../../component/home/img/avatarStudent.png';
 import axios from 'axios';
-import { BASE_URL } from '../../constant';
+import { AVATAR_STUDENT_URL, BASE_URL } from '../../constant';
 import { actions, useStore } from '../../store';
 import { initState } from '../../store/reducer';
 const menuList = [
@@ -42,9 +42,23 @@ const menuList = [
   },
 ];
 
+const menuListTeacher = [
+  {
+    name: 'Trang chủ',
+    path: '',
+  },
+  {
+    name: 'Lịch dạy',
+    path: '/timetable',
+  },
+  {
+    name: 'Nhập điểm',
+    path: '/teacher/mark',
+  },
+];
+
 const TooltipUser = (props: any) => {
   const history = useHistory();
-  console.log(props.id);
   return (
     <List>
       <ListItemButton component={Link} to="/Students/UpdateProfile">
@@ -82,6 +96,12 @@ function Header() {
   const classes = useStyles();
   const [state, dispatch] = useStore();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const imageUrl = useMemo(() => {
+    if (state.userInfo === null) return Avatars;
+    const imageName = state.userInfo?.image;
+    if (imageName === undefined) return Avatars;
+    return `${AVATAR_STUDENT_URL}/${imageName}`;
+  }, [state.userInfo]);
 
   const handleListItemClick = (index: number) => {
     setSelectedIndex(index);
@@ -123,11 +143,11 @@ function Header() {
             >
               <Box className={classes.menu}>
                 <Avatar
-                  src={Avatars}
+                  src={imageUrl}
                   alt="avatar"
-                  sx={{ width: '24px', height: '24px', marginRight: 1 }}
+                  sx={{ width: '30px', height: '30px', marginRight: 1 }}
                 />
-                <Typography>Nguyễn Khương Duy</Typography>
+                <Typography>{`${state.userInfo?.firstName} ${state.userInfo?.lastName}`}</Typography>
               </Box>
             </Tooltip>
           </Box>

@@ -1,19 +1,26 @@
 import { makeStyles } from '@mui/styles';
-import { Box, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { Avatar, Box, Typography } from '@mui/material';
+import { useMemo } from 'react';
 
 import Header from '../../templates/header';
-import DetailStudent from './detailStudent';
+import DetailStudent from './DetailStudent';
 import avatarStudent from './img/avatarStudent.png';
-import DetailPersonal from './detailPersonal';
-import { BASE_URL } from '../../constant';
+import DetailPersonal from './DetailPersonal';
 import { useStore } from '../../store';
+import { AVATAR_STUDENT_URL } from '../../constant';
 
 export default function Home() {
   const classes = useStyles();
   const [state, dispatch] = useStore();
-  const student = state.userInfo;
+  const student = useMemo(() => {
+    return state.userInfo;
+  }, [state]);
+  const imageUrl = useMemo(() => {
+    if (student === null) return avatarStudent;
+    const imageName = student?.image;
+    if (imageName === undefined) return avatarStudent;
+    return `${AVATAR_STUDENT_URL}/${imageName}`;
+  }, [student]);
   return (
     <>
       <Header />
@@ -24,18 +31,19 @@ export default function Home() {
         </Box>
         <Box className="row">
           <Box className="col-md-3">
-            <img
-              alt="avatarStudent"
-              src={avatarStudent}
+            <Avatar
               className={classes.avatarStudent}
-            ></img>
+              src={imageUrl}
+              alt="avatar"
+              sx={{ width: '200px', height: '200px', marginRight: 1 }}
+            />
           </Box>
           <DetailStudent
             name={`${student?.firstName} ${student?.lastName}`}
             gender={student?.gender}
             yearJoin={student?.yearJoin}
             class={student?.class.name}
-            teacher={student?.class.teacher.name}
+            teacher={student?.class.teacher}
             status={student?.status}
           />
         </Box>
@@ -52,7 +60,7 @@ export default function Home() {
 
 const useStyles = makeStyles({
   avatarStudent: {
-    maxWidth: '60%',
+    maxWidth: '80%',
     display: 'inline-block',
     backgroundColor: '#fff',
     padding: '4px',

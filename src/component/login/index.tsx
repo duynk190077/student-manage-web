@@ -53,8 +53,6 @@ export default function Login() {
       });
   };
 
-  console.log(state);
-
   return (
     <Box className={classes.container}>
       <Box className={classes.wrapLogin}>

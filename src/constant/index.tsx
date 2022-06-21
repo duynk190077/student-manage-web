@@ -240,3 +240,5 @@ export const roles = [
 ];
 
 export const BASE_URL = 'http://localhost:3000';
+
+export const AVATAR_STUDENT_URL = 'http://localhost:3000/students/avatar';

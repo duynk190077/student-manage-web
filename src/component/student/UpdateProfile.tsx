@@ -11,21 +11,27 @@ import {
   Button,
   Snackbar,
   Alert,
+  Avatar,
+  Badge,
+  IconButton,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { useState, useEffect, ChangeEvent, SyntheticEvent } from 'react';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { PhotoCamera } from '@mui/icons-material';
 
-import { BASE_URL, listGender } from '../../constant';
+import { AVATAR_STUDENT_URL, BASE_URL, listGender } from '../../constant';
 import Student, {
   defaultStudent,
   StudentField,
 } from '../../interfaces/Student';
 import Header from '../../templates/header';
 import Parent, { defaultParent, ParentField } from '../../interfaces/Parent';
-import { useStore } from '../../store';
+import { useStore, actions } from '../../store';
+import avatarStudent from '../home/img/avatarStudent.png';
+import { authHeader } from '../shared/helper';
 
 function UpdateProfile() {
   const classes = useStyles();
@@ -35,6 +41,7 @@ function UpdateProfile() {
   const [mother, SetMother] = useState<Parent | any>(defaultParent);
   const [error, setError] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+
   const studentField: StudentField[] = [
     {
       name: 'Họ và tên',
@@ -108,16 +115,16 @@ function UpdateProfile() {
       editable: true,
     },
   ];
-  const { id } = state;
 
   useEffect(() => {
-    axios.get(`${BASE_URL}/students/${id}`).then((respone) => {
-      const fullName = respone.data.firstName + ' ' + respone.data.lastName;
-      SetStudent({ ...respone.data, fullName });
-      SetFather(respone.data.parents[0]);
-      SetMother(respone.data.parents[1]);
-    });
-  }, []);
+    if (state.userInfo !== null) {
+      const fullName =
+        state.userInfo?.firstName + ' ' + state.userInfo?.lastName;
+      SetStudent({ ...state.userInfo, fullName });
+      SetFather(state.userInfo?.parents[0]);
+      SetMother(state.userInfo?.parents[1]);
+    }
+  }, [state.userInfo]);
 
   const handleChangeInputStudent =
     (prop: keyof Student) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -136,9 +143,34 @@ function UpdateProfile() {
     (prop: keyof Parent) => (event: ChangeEvent<HTMLInputElement>) => {
       SetMother({ ...mother, [prop]: event.target.value });
     };
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const fileList = event.target.files;
+    if (!fileList) return;
+    setError(false);
+    const formData = new FormData();
+    formData.append('file', fileList[0]);
+    const respone = await axios.post(`${BASE_URL}/students/upload`, formData, {
+      headers: authHeader(),
+    });
+
+    if (respone.data !== false) {
+      setError(false);
+      axios.delete(`${AVATAR_STUDENT_URL}/${student.image}`, {
+        headers: authHeader(),
+      });
+      dispatch(
+        actions.setState({
+          ...state,
+          userInfo: { ...state.userInfo, image: respone.data },
+        }),
+      );
+    } else setError(true);
+    setOpen(true);
+  };
 
   const handleUpdateStudent = (event: SyntheticEvent) => {
     event.preventDefault();
+    setError(false);
     axios({
       method: 'put',
       url: `${BASE_URL}/students/${student.id}`,
@@ -180,7 +212,46 @@ function UpdateProfile() {
           <Box className={classes.wrapContent}>
             <Typography variant="h5">Thông tin cá nhân</Typography>
             <hr></hr>
-            <Stack direction="column" spacing={3}>
+            <Stack
+              direction="column"
+              spacing={3}
+              sx={{ justifyContent: 'center', alignItems: 'center' }}
+            >
+              <Badge
+                overlap="circular"
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                badgeContent={
+                  <label
+                    htmlFor="icon-button-file"
+                    style={{ borderRadius: '50%', backgroundColor: '#ccc' }}
+                  >
+                    <input
+                      accept="image/*"
+                      id="icon-button-file"
+                      type="file"
+                      onChange={handleFileChange}
+                      hidden
+                    />
+                    <IconButton
+                      color="primary"
+                      aria-label="upload picture"
+                      component="span"
+                    >
+                      <PhotoCamera sx={{ color: '#fff' }} />
+                    </IconButton>
+                  </label>
+                }
+              >
+                <Avatar
+                  src={
+                    student.image
+                      ? `${AVATAR_STUDENT_URL}/${student.image}`
+                      : avatarStudent
+                  }
+                  alt="avatar"
+                  sx={{ width: '100px', height: '100px' }}
+                />
+              </Badge>
               {studentField.map((p, index) => {
                 return p?.input === true ? (
                   <Box

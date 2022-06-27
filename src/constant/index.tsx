@@ -12,6 +12,7 @@ import Timetable from '../component/timetable';
 import TimetableAdmin from '../component/admin/Timetable';
 import { Box, Typography } from '@mui/material';
 import EditTimetable from '../component/admin/Timetable/EditTimetable';
+import StudentMarks from '../component/student/StudentMark';
 
 export const PUCLIC_PAGES: IRoute[] = [
   {
@@ -67,6 +68,11 @@ export const PUCLIC_PAGES: IRoute[] = [
   {
     component: EditTimetable,
     path: '/admin/Timetable/:id',
+    exact: true,
+  },
+  {
+    component: StudentMarks,
+    path: '/student/student-mark',
     exact: true,
   },
 ];
@@ -190,6 +196,8 @@ export const days = [
     field: 'saturday',
   },
 ];
+
+export const lessons = [1, 2, 3, 4, 5];
 
 export const timetableColumns1: GridColDef[] = days.map((day) => {
   return {

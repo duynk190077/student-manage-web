@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Link, useHistory } from 'react-router-dom';
-import { memo, SyntheticEvent, useMemo, useState } from 'react';
+import { memo, SyntheticEvent, useMemo } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import clsx from 'clsx';
 
@@ -19,7 +19,7 @@ import axios from 'axios';
 import { AVATAR_STUDENT_URL, BASE_URL } from '../../constant';
 import { actions, useStore } from '../../store';
 import { initState } from '../../store/reducer';
-const menuList = [
+const menuListStudent = [
   {
     name: 'Trang chủ',
     path: '',
@@ -30,7 +30,7 @@ const menuList = [
   },
   {
     name: 'Bảng điểm',
-    path: '/student-mark',
+    path: '/student/student-mark',
   },
   {
     name: 'Tài liệu',
@@ -92,20 +92,19 @@ const TooltipUser = (props: any) => {
   );
 };
 
-function Header() {
+function Header(props: any) {
+  const { id } = props;
   const classes = useStyles();
   const [state, dispatch] = useStore();
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const imageUrl = useMemo(() => {
     if (state.userInfo === null) return Avatars;
     const imageName = state.userInfo?.image;
     if (imageName === undefined) return Avatars;
     return `${AVATAR_STUDENT_URL}/${imageName}`;
   }, [state.userInfo]);
-
-  const handleListItemClick = (index: number) => {
-    setSelectedIndex(index);
-  };
+  const menuList = useMemo(() => {
+    return state?.role === 'Student' ? menuListStudent : menuListTeacher;
+  }, [state.role]);
 
   return (
     <header className={classes.header}>
@@ -126,8 +125,7 @@ function Header() {
                 return (
                   <ListItemButton
                     key={index}
-                    selected={selectedIndex === index}
-                    onClick={() => handleListItemClick(index)}
+                    selected={index === id}
                     component={Link}
                     to={item.path}
                   >

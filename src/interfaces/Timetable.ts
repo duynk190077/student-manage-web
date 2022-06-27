@@ -2,7 +2,7 @@ export interface Timetable {
   id?: string;
   semester: string;
   week: string | null;
-  class: string | null;
+  class?: string | null;
   monday: string[] | null;
   tusday: string[] | null;
   wednesday: string[] | null;

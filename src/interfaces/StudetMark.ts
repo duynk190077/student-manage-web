@@ -16,4 +16,3 @@ export const defaultStudentMark: StudentMark = {
   factor2: [],
   factor3: [],
 };
-

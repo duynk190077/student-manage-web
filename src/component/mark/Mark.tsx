@@ -4,11 +4,7 @@ import TeacherMark from '../teacher/TeacherMark';
 
 function Mark() {
   const [state, dispatch] = useStore();
-  return (
-    <>
-      {state?.role === 'Student' ? <StudentMarks /> : <TeacherMark />}
-    </>
-  );
+  return <>{state?.role === 'Student' ? <StudentMarks /> : <TeacherMark />}</>;
 }
 
 export default Mark;

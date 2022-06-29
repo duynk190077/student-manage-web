@@ -14,11 +14,14 @@ import SearchIcon from '@mui/icons-material/Search';
 import clsx from 'clsx';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-
 import LOGO2 from './img/LOGO2.png';
 import Avatars from '../../component/home/img/avatarStudent.png';
 import axios from 'axios';
-import { AVATAR_STUDENT_URL, AVATAR_TEACHER_URL, BASE_URL } from '../../constant';
+import {
+  AVATAR_STUDENT_URL,
+  AVATAR_TEACHER_URL,
+  BASE_URL,
+} from '../../constant';
 import { actions, useStore } from '../../store';
 import { initState } from '../../store/reducer';
 const menuListStudent = [
@@ -99,22 +102,25 @@ function Header(props: any) {
   const classes = useStyles();
   const [state, dispatch] = useStore();
   const RenderAvatar = useMemo(() => {
-    if (state.userInfo === null) return (
-      <AccountCircleIcon fontSize='large' sx={{ color: '#ccc', mr: 1 }}/>
-    )
+    if (state.userInfo === null)
+      return (
+        <AccountCircleIcon fontSize="large" sx={{ color: '#ccc', mr: 1 }} />
+      );
     const imageName = state.userInfo?.image;
-    if (imageName === '' || imageName === undefined) return (
-      <AccountCircleIcon fontSize='large' sx={{ color: '#ccc', mr: 1 }}/>
-    )
-    const url = state?.role === 'Student' ? AVATAR_STUDENT_URL :  AVATAR_TEACHER_URL
+    if (imageName === '' || imageName === undefined)
+      return (
+        <AccountCircleIcon fontSize="large" sx={{ color: '#ccc', mr: 1 }} />
+      );
+    const url =
+      state?.role === 'Student' ? AVATAR_STUDENT_URL : AVATAR_TEACHER_URL;
     return (
-      <Avatar 
+      <Avatar
         src={`${url}/${imageName}`}
-        alt='Avatar'
+        alt="Avatar"
         sx={{ marginRight: 1 }}
       />
-    )
-  }, [state.userInfo])
+    );
+  }, [state.userInfo]);
   const menuList = useMemo(() => {
     return state?.role === 'Student' ? menuListStudent : menuListTeacher;
   }, [state.role]);

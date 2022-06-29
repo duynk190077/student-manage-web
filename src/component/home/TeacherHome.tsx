@@ -1,13 +1,13 @@
-import { Avatar, Grid, Stack, Typography } from "@mui/material";
+import { Avatar, Grid, Stack, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useStore } from "../../store";
-import { useMemo } from "react";
-import { AVATAR_TEACHER_URL } from "../../constant";
+import { useStore } from '../../store';
+import { useMemo } from 'react';
+import { AVATAR_TEACHER_URL } from '../../constant';
 import Teacher, { defaultTeacher } from '../../interfaces/Teacher';
 
 interface TeacherField {
-  id: keyof Teacher,
-  headerName: string,
+  id: keyof Teacher;
+  headerName: string;
 }
 
 const teacherField: TeacherField[] = [
@@ -29,9 +29,9 @@ const teacherField: TeacherField[] = [
   },
   {
     id: 'subject',
-    headerName: 'Môn dạy'
-  }
-]
+    headerName: 'Môn dạy',
+  },
+];
 
 function TeacherHome() {
   const [state, dispatch] = useStore();
@@ -40,34 +40,53 @@ function TeacherHome() {
     return defaultTeacher;
   }, [state]);
   const RenderAvatar = useMemo(() => {
-    if (teacher === null) return (
-      <AccountCircleIcon sx={{ width: '200px', height: '200px', color: '#ccc' }}/>
-    )
+    if (teacher === null)
+      return (
+        <AccountCircleIcon
+          sx={{ width: '200px', height: '200px', color: '#ccc' }}
+        />
+      );
     const imageName = teacher?.image;
-    if (imageName === '' || imageName === undefined) return (
-      <AccountCircleIcon sx={{ width: '200px', height: '200px', color: '#ccc' }}/>
-    )
+    if (imageName === '' || imageName === undefined)
+      return (
+        <AccountCircleIcon
+          sx={{ width: '200px', height: '200px', color: '#ccc' }}
+        />
+      );
     return (
-      <Avatar 
+      <Avatar
         src={`${AVATAR_TEACHER_URL}/${imageName}`}
-        alt='Avatar'
+        alt="Avatar"
         sx={{ width: '200px', height: '200px', marginRight: 1 }}
       />
-    )
-  }, [teacher])
+    );
+  }, [teacher]);
   const GetDateFormat = (dateofBirth: any) => {
     const date = new Date(dateofBirth);
     return date.toLocaleDateString();
-  }
+  };
   return (
     <Grid container spacing={2}>
-      <Grid item xs={3} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Grid
+        item
+        xs={3}
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
         {RenderAvatar}
       </Grid>
-      <Grid item xs={6} container spacing={2} direction='column' sx={{ justifyContent: 'space-evenly' }}>
+      <Grid
+        item
+        xs={6}
+        container
+        spacing={2}
+        direction="column"
+        sx={{ justifyContent: 'space-evenly' }}
+      >
         <Grid container spacing={2}>
           <Grid item xs={3}>
-            <Typography variant="h6" fontSize={16}>Họ và Tên:</Typography>
+            <Typography variant="h6" fontSize={16}>
+              Họ và Tên:
+            </Typography>
           </Grid>
           <Grid item xs={6}>
             <Typography variant="subtitle1">{`${teacher.firstName} ${teacher.lastName}`}</Typography>
@@ -77,19 +96,23 @@ function TeacherHome() {
           return (
             <Grid container spacing={2} key={index}>
               <Grid item xs={3}>
-                <Typography variant="h6" fontSize={16}>{p.headerName}:</Typography>
+                <Typography variant="h6" fontSize={16}>
+                  {p.headerName}:
+                </Typography>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="subtitle1">
-                  {p.id === 'dateofBirth' ? GetDateFormat(teacher[p.id]) : teacher[p.id]}
+                  {p.id === 'dateofBirth'
+                    ? GetDateFormat(teacher[p.id])
+                    : teacher[p.id]}
                 </Typography>
               </Grid>
             </Grid>
-          )
+          );
         })}
       </Grid>
     </Grid>
-  )
+  );
 }
 
 export default TeacherHome;

@@ -19,5 +19,5 @@ export const defaultTeacher: Teacher = {
   phoneNumber: '',
   email: '',
   subject: '',
-  image: ''
+  image: '',
 };

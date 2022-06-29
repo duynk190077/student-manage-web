@@ -12,11 +12,13 @@ import { Link, useHistory } from 'react-router-dom';
 import { memo, SyntheticEvent, useMemo } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import clsx from 'clsx';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 
 import LOGO2 from './img/LOGO2.png';
 import Avatars from '../../component/home/img/avatarStudent.png';
 import axios from 'axios';
-import { AVATAR_STUDENT_URL, BASE_URL } from '../../constant';
+import { AVATAR_STUDENT_URL, AVATAR_TEACHER_URL, BASE_URL } from '../../constant';
 import { actions, useStore } from '../../store';
 import { initState } from '../../store/reducer';
 const menuListStudent = [
@@ -30,7 +32,7 @@ const menuListStudent = [
   },
   {
     name: 'Bảng điểm',
-    path: '/student/student-mark',
+    path: '/student-mark',
   },
   {
     name: 'Tài liệu',
@@ -53,7 +55,7 @@ const menuListTeacher = [
   },
   {
     name: 'Nhập điểm',
-    path: '/teacher/mark',
+    path: '/student-mark',
   },
 ];
 
@@ -96,12 +98,23 @@ function Header(props: any) {
   const { id } = props;
   const classes = useStyles();
   const [state, dispatch] = useStore();
-  const imageUrl = useMemo(() => {
-    if (state.userInfo === null) return Avatars;
+  const RenderAvatar = useMemo(() => {
+    if (state.userInfo === null) return (
+      <AccountCircleIcon fontSize='large' sx={{ color: '#ccc', mr: 1 }}/>
+    )
     const imageName = state.userInfo?.image;
-    if (imageName === undefined) return Avatars;
-    return `${AVATAR_STUDENT_URL}/${imageName}`;
-  }, [state.userInfo]);
+    if (imageName === '' || imageName === undefined) return (
+      <AccountCircleIcon fontSize='large' sx={{ color: '#ccc', mr: 1 }}/>
+    )
+    const url = state?.role === 'Student' ? AVATAR_STUDENT_URL :  AVATAR_TEACHER_URL
+    return (
+      <Avatar 
+        src={`${url}/${imageName}`}
+        alt='Avatar'
+        sx={{ marginRight: 1 }}
+      />
+    )
+  }, [state.userInfo])
   const menuList = useMemo(() => {
     return state?.role === 'Student' ? menuListStudent : menuListTeacher;
   }, [state.role]);
@@ -140,11 +153,7 @@ function Header(props: any) {
               arrow
             >
               <Box className={classes.menu}>
-                <Avatar
-                  src={imageUrl}
-                  alt="avatar"
-                  sx={{ width: '30px', height: '30px', marginRight: 1 }}
-                />
+                {RenderAvatar}
                 <Typography>{`${state.userInfo?.firstName} ${state.userInfo?.lastName}`}</Typography>
               </Box>
             </Tooltip>
@@ -223,6 +232,7 @@ const useStyles = makeStyles({
     marginLeft: 'auto!important',
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
     padding: '0',
   },
   user: {

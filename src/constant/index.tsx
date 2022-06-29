@@ -12,7 +12,7 @@ import Timetable from '../component/timetable';
 import TimetableAdmin from '../component/admin/Timetable';
 import { Box, Typography } from '@mui/material';
 import EditTimetable from '../component/admin/Timetable/EditTimetable';
-import StudentMarks from '../component/student/StudentMark';
+import Mark from '../component/mark/Mark';
 
 export const PUCLIC_PAGES: IRoute[] = [
   {
@@ -71,8 +71,8 @@ export const PUCLIC_PAGES: IRoute[] = [
     exact: true,
   },
   {
-    component: StudentMarks,
-    path: '/student/student-mark',
+    component: Mark,
+    path: '/student-mark',
     exact: true,
   },
 ];
@@ -250,3 +250,5 @@ export const roles = [
 export const BASE_URL = 'http://localhost:3000';
 
 export const AVATAR_STUDENT_URL = 'http://localhost:3000/students/avatar';
+
+export const AVATAR_TEACHER_URL = 'http://localhost:3000/teachers/avatar';

@@ -62,7 +62,9 @@ function StudentMarks() {
       return (
         <TableCell
           key={field}
-          className={clsx(classes.tableCell, {[classes.tableCell1]: id === 0})}
+          className={clsx(classes.tableCell, {
+            [classes.tableCell1]: id === 0,
+          })}
           align="center"
         >
           {rows[field]}
@@ -71,7 +73,13 @@ function StudentMarks() {
     const factor: any = rows[field];
     return factor.map((p: any, index: any) => {
       return (
-        <TableCell key={index} className={clsx(classes.tableCell, {[classes.tableCell1]: id === 0})} align="center">
+        <TableCell
+          key={index}
+          className={clsx(classes.tableCell, {
+            [classes.tableCell1]: id === 0,
+          })}
+          align="center"
+        >
           {p}
         </TableCell>
       );
@@ -101,7 +109,9 @@ function StudentMarks() {
                   return (
                     <TableCell
                       key={index}
-                      className={clsx(classes.tableCell, classes.tableHead, {[classes.tableCell1]: index === 0})}
+                      className={clsx(classes.tableCell, classes.tableHead, {
+                        [classes.tableCell1]: index === 0,
+                      })}
                       align="center"
                       colSpan={RenderColSpan(p.id)}
                     >
@@ -136,7 +146,7 @@ const useStyles = makeStyles({
   },
   tableCell1: {
     borderLeft: '1px solid rgba(224, 224, 224, 1)',
-  }
+  },
 });
 
 export default StudentMarks;

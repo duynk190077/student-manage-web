@@ -1,7 +1,7 @@
 export interface StudentMark {
   id?: string;
   semester: string;
-  subject: string;
+  subject?: string;
   student?: string;
   factor1: number[];
   factor2: number[];
@@ -16,3 +16,4 @@ export const defaultStudentMark: StudentMark = {
   factor2: [],
   factor3: [],
 };
+

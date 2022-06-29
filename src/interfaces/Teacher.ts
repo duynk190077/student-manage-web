@@ -7,6 +7,7 @@ export default interface Teacher {
   phoneNumber: string;
   email: string;
   subject: string;
+  image: string;
 }
 
 export const defaultTeacher: Teacher = {
@@ -18,4 +19,5 @@ export const defaultTeacher: Teacher = {
   phoneNumber: '',
   email: '',
   subject: '',
+  image: '',
 };

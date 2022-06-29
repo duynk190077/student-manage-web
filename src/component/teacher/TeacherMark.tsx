@@ -8,8 +8,9 @@ import {
   TableCell,
   TableBody,
   TableRow,
+  TextField,
 } from '@mui/material';
-import { Fragment } from 'react';
+import { ChangeEvent, Fragment, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 
 import { StudentMark } from '../../interfaces/StudetMark';
@@ -23,8 +24,8 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
   {
-    id: 'subject',
-    headerName: 'Môn học',
+    id: 'student',
+    headerName: 'Họ và Tên',
   },
   {
     id: 'factor1',
@@ -42,23 +43,33 @@ const headCells: HeadCell[] = [
 
 const rows: StudentMark = {
   semester: '20222',
-  subject: 'Toán',
+  student: 'Trần Thị Huyền Trang',
   factor1: [5, 6, 7, 8, 8],
   factor2: [5, 7, 8, 10],
   factor3: [3],
 };
 
-function StudentMarks() {
+function TeacherMark() {
   const classes = useStyles();
 
+  const [mark, setMark] = useState<StudentMark>(rows);
+
   const RenderColSpan = (field: keyof StudentMark) => {
-    if (field === 'subject') return 1;
-    const factor: any = rows[field];
+    if (field === 'student') return 1;
+    const factor: any = mark[field];
     return factor.length;
   };
 
+  const handleChangeMark =
+    (index: number, field: keyof StudentMark) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const newFactor: any = mark[field];
+      newFactor[index] = +event.target.value;
+      setMark({ ...mark, [field]: newFactor });
+    };
+
   const RenderCell = (field: keyof StudentMark, id: number) => {
-    if (field === 'subject')
+    if (field === 'student')
       return (
         <TableCell
           key={field}
@@ -67,11 +78,11 @@ function StudentMarks() {
           })}
           align="center"
         >
-          {rows[field]}
+          {mark[field]}
         </TableCell>
       );
-    const factor: any = rows[field];
-    return factor.map((p: any, index: any) => {
+    const factor: any = mark[field];
+    return factor.map((p: any, index: number) => {
       return (
         <TableCell
           key={index}
@@ -80,11 +91,17 @@ function StudentMarks() {
           })}
           align="center"
         >
-          {p}
+          <TextField
+            className={classes.textField}
+            value={p}
+            onChange={handleChangeMark(index, field)}
+          />
         </TableCell>
       );
     });
   };
+
+  console.log(mark);
 
   return (
     <>
@@ -114,6 +131,7 @@ function StudentMarks() {
                       })}
                       align="center"
                       colSpan={RenderColSpan(p.id)}
+                      sx={{ minWidth: '13em' }}
                     >
                       {p.headerName}
                     </TableCell>
@@ -147,6 +165,16 @@ const useStyles = makeStyles({
   tableCell1: {
     borderLeft: '1px solid rgba(224, 224, 224, 1)',
   },
+  textField: {
+    '& .MuiOutlinedInput-input': {
+      padding: '0',
+      textAlign: 'center',
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderRadius: '0',
+      border: 'none',
+    },
+  },
 });
 
-export default StudentMarks;
+export default TeacherMark;

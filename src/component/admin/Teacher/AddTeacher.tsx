@@ -35,6 +35,7 @@ function AddTeacher() {
     dateofBirth: null,
     email: '',
     subject: '',
+    image: '',
   });
 
   const handleChangeInput =

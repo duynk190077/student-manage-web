@@ -31,6 +31,7 @@ function DetailTeacher() {
     dateofBirth: null,
     email: '',
     subject: '',
+    image: '',
   });
 
   const [editable, setEditable] = useState<boolean>(true);

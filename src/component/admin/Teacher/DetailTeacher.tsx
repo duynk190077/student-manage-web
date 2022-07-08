@@ -19,9 +19,12 @@ import Teacher from '../../../interfaces/Teacher';
 import { listGender, listSubJect } from '../../../constant';
 import ParamTypes from '../../../interfaces/ParamTypes';
 import { BASE_URL } from '../../../constant';
+import { useStore } from '../../../store';
 
 function DetailTeacher() {
   const { id } = useParams<ParamTypes>();
+
+  const [state, dispatch] = useStore();
 
   const [teacher, setTeacher] = useState<Teacher>({
     firstName: '',
@@ -148,7 +151,7 @@ function DetailTeacher() {
                 sx={{ width: '98%' }}
                 value={teacher.subject}
               >
-                {listSubJect.map((option) => (
+                {state.listSubject?.map((option: any) => (
                   <MenuItem key={option} value={option}>
                     {option}
                   </MenuItem>

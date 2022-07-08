@@ -1,4 +1,4 @@
-import { memo, useState, ChangeEvent, useEffect } from 'react';
+import { memo, useState, ChangeEvent, useEffect, SyntheticEvent } from 'react';
 import {
   Box,
   TextField,
@@ -12,7 +12,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 
-import Teacher from '../../../interfaces/Teacher';
+import Teacher, { defaultTeacher } from '../../../interfaces/Teacher';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import { BASE_URL, listGender } from '../../../constant';
 import {
@@ -20,6 +20,7 @@ import {
   validateEmail,
   validatePhoneNumber,
   authHeader,
+  validateTeacher,
 } from '../../shared/helper';
 import CusTextField from '../../shared/TextField';
 import { useStore } from '../../../store';
@@ -45,8 +46,21 @@ function AddTeacher() {
   const handleChangeDate = (date: Date | null) => {
     setTeacher({ ...teacher, dateofBirth: date });
   };
-  const handleSubmit = async () => {
-    await axios.post(`${BASE_URL}/teachers`, { teacher });
+  const handleSubmit = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (!validateTeacher(teacher)) {
+      const respone = await axios.post(
+        `${BASE_URL}/teachers`,
+        { ...teacher },
+        {
+          headers: authHeader(),
+        },
+      );
+      if (respone.data !== false) {
+        alert('Add teacher successfully');
+        setTeacher(defaultTeacher);
+      } else alert('Add teacher fail');
+    } else alert('Input is in valid');
   };
 
   return (

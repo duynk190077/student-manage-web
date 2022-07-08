@@ -1,6 +1,12 @@
+import Teacher from '../../../interfaces/Teacher';
+
 export const validateName = (name: string) => {
   if (name === '') return { status: true, error: 'Tên không được để trống' };
-  if (!name.match(/^[a-zA-Z]+$/))
+  if (
+    !name.match(
+      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s]+$/,
+    )
+  )
     return { status: true, error: 'Tên chỉ bao gồm các kí tự a-zA-z' };
   return { status: false };
 };
@@ -38,4 +44,19 @@ export const authHeader = () => {
   return {
     Authorization: 'Bearer ' + token,
   };
+};
+
+export const validateTeacher = (teacher: Teacher) => {
+  let check = false;
+  check = check || validateName(teacher.firstName).status;
+  check = check || validateName(teacher.lastName).status;
+  check = check || validateEmail(teacher.email).status;
+  check = check || validatePhoneNumber(teacher.phoneNumber).status;
+  return check;
+};
+
+export const getListWeek = (week: number) => {
+  let listWeek: string[] = [];
+  for (let i = 1; i <= 6; i++) listWeek.push((week + i).toString());
+  return listWeek;
 };

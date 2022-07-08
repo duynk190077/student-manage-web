@@ -38,7 +38,7 @@ function Teachers() {
   const actionColumn: GridColDef[] = [
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: '',
       width: 200,
       renderCell: (params: GridValueGetterParams) => {
         return (
@@ -129,7 +129,7 @@ function Teachers() {
     setFilterTeacherRows(data);
   };
   const handleLinkClick = (name: string) => {
-    history.push(`/Teacher/${name}`);
+    history.push(`/admin/Teacher/${name}`);
   };
   const handleDeleteAction = async (id: string) => {
     await axios.delete(`${BASE_URL}/teachers/${id}`);
@@ -148,43 +148,16 @@ function Teachers() {
         <Button variant="contained" onClick={() => handleLinkClick('Add')}>
           Thêm giáo viên mới
         </Button>
-        <Stack
-          spacing={2}
-          direction="row"
-          sx={{ mb: 2, alignItems: 'flex-end' }}
-        >
-          {listProperty.map((p, index) => {
-            const optionProps = setProps(p);
-            return (
-              <Autocomplete
-                key={index}
-                {...optionProps}
-                onChange={(event, value) => setValueOption(p, value)}
-                renderInput={(parmas) => (
-                  <TextField {...parmas} label={p} variant="standard" />
-                )}
-                sx={{ width: 100 }}
-              />
-            );
-          })}
-          <Button
-            variant="contained"
-            sx={{ height: '31px', width: '100px' }}
-            onClick={handleFilterClick}
-          >
-            Filter
-          </Button>
-        </Stack>
-        <div style={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 400, width: '100%', bgcolor: '#fff', p: 3, mt: 3 }}>
           <DataGrid
-            rows={filterTeacherRows}
+            rows={teachers}
             columns={teacherColumns.concat(actionColumn)}
             pageSize={5}
             rowsPerPageOptions={[5]}
             checkboxSelection
             disableSelectionOnClick
           />
-        </div>
+        </Box>
         <Dialog
           open={open}
           onClose={handleClickClose}

@@ -33,7 +33,7 @@ import { useStore, actions } from '../../store';
 import avatarStudent from '../home/img/avatarStudent.png';
 import { authHeader } from '../shared/helper';
 
-function UpdateProfile() {
+function StudentUpdateProfile() {
   const classes = useStyles();
   const [state, dispatch] = useStore();
   const [student, SetStudent] = useState<Student | any>(defaultStudent);
@@ -200,12 +200,13 @@ function UpdateProfile() {
 
     setOpen(false);
   };
+
   return (
     <>
       <Header />
       <Box className="container">
         <Box className="mainTitle">
-          <Typography variant="h3">Cập nhật thông tin học sinh</Typography>
+          <Typography variant="h3">Cập nhật thông tin cá nhân</Typography>
           <hr></hr>
         </Box>
         <Box className={classes.mainContent}>
@@ -467,4 +468,4 @@ const useStyles = makeStyles({
     },
   },
 });
-export default UpdateProfile;
+export default StudentUpdateProfile;

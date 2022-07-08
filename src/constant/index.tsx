@@ -4,7 +4,7 @@ import Dashboard from '../component/admin/Dashboard';
 import Teachers from '../component/admin/Teacher/index';
 import EditTeacher from '../component/admin/Teacher/EditTeacher';
 import Class from '../component/admin/Class';
-import UpdateProfile from '../component/student/UpdateProfile';
+import UpdateProfile from '../component/update-profile';
 import ChangePassword from '../component/user/ChangePassword';
 import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import DetailClass from '../component/admin/Class/DetailClass';
@@ -42,7 +42,7 @@ export const PUCLIC_PAGES: IRoute[] = [
   },
   {
     component: UpdateProfile,
-    path: '/Students/UpdateProfile',
+    path: '/UpdateProfile',
     exact: true,
   },
   {
@@ -79,27 +79,26 @@ export const PUCLIC_PAGES: IRoute[] = [
 
 export const teacherColumns: GridColDef[] = [
   //{field: 'id', headerName: 'ID', hideable: false, width: 100},
-  { field: 'firstName', headerName: 'FirstName', width: 150 },
-  { field: 'lastName', headerName: 'LastName', width: 100 },
+  { field: 'firstName', headerName: 'Họ và tên đệm', width: 150 },
+  { field: 'lastName', headerName: 'Tên', width: 100 },
   {
     field: 'fullName',
-    headerName: 'FullName',
+    headerName: 'Họ và Tên',
     sortable: false,
     width: 170,
     valueGetter: (params: GridValueGetterParams) =>
       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   },
-  { field: 'gender', headerName: 'Gender', width: 70 },
+  { field: 'gender', headerName: 'Giới tính', width: 70 },
   {
     field: 'dateofBirth',
     type: 'dateTime',
-    headerName: 'Date of Birth',
+    headerName: 'Ngày sinh',
     width: 120,
     valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),
   },
   { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'subject', headerName: 'SubJect', width: 100 },
-  { field: 'class', headerName: 'Class', width: 100 },
+  { field: 'subject', headerName: 'Môn dạy', width: 100 },
 ];
 
 export const classColumns: GridColDef[] = [

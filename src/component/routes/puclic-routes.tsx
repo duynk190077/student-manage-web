@@ -25,6 +25,30 @@ async function initState(state: any, dispatch: any) {
         }),
       );
     }
+    if (state.semester === '') {
+      const respone = await axios.get(`${BASE_URL}/semesters/get-current`, {
+        headers: authHeader(),
+      });
+      const data = respone.data;
+      dispatch(
+        actions.setSemester({
+          semester: data.name,
+          week: data.week,
+          status: data.status,
+        }),
+      );
+    }
+    if (!state.listClass.length) {
+      const respone = await axios.get(`${BASE_URL}/classrooms`, {
+        headers: authHeader(),
+      });
+      const classrooms = respone.data;
+      dispatch(
+        actions.setListClass({
+          listClass: classrooms.map((p: { name: any }) => p.name),
+        }),
+      );
+    }
   } catch (error) {
     throw error;
   }
@@ -37,7 +61,7 @@ const UserUrl = () => {
     if (auth) {
       initState(state, dispatch);
     }
-  }, [auth, state, dispatch]);
+  }, []);
 
   const publicR = PUCLIC_PAGES.map((p) => {
     const Component = p.component;

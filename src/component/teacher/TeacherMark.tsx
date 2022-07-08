@@ -9,13 +9,19 @@ import {
   TableBody,
   TableRow,
   TextField,
+  Collapse,
+  Grid,
+  IconButton,
+  Button,
 } from '@mui/material';
 import { ChangeEvent, Fragment, useState } from 'react';
 import { makeStyles } from '@mui/styles';
+import clsx from 'clsx';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 import { StudentMark } from '../../interfaces/StudetMark';
 import Header from '../../templates/header';
-import clsx from 'clsx';
 
 interface HeadCell {
   id: keyof StudentMark;
@@ -51,8 +57,8 @@ const rows: StudentMark = {
 
 function TeacherMark() {
   const classes = useStyles();
-
   const [mark, setMark] = useState<StudentMark>(rows);
+  const [open, setOpen] = useState<boolean>(false);
 
   const RenderColSpan = (field: keyof StudentMark) => {
     if (field === 'student') return 1;
@@ -111,45 +117,80 @@ function TeacherMark() {
           <Typography variant="h3">Bảng điểm</Typography>
           <hr></hr>
         </Box>
-        <TableContainer
-          component={Paper}
-          sx={{
-            p: 3,
-            boxShadow: 'none',
-            border: 'none',
-          }}
-        >
-          <Table size="small" sx={{ borderCollapse: 'unset' }}>
-            <TableHead>
-              <TableRow>
-                {headCells.map((p, index) => {
-                  return (
-                    <TableCell
-                      key={index}
-                      className={clsx(classes.tableCell, classes.tableHead, {
-                        [classes.tableCell1]: index === 0,
+        <Grid sx={{ p: 3 }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              border: '1px solid #eee',
+              pb: () => open === true ? 0 : 1,
+              boxShadow:
+                '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)',
+            }}
+          >
+            <Grid item xs={1}>
+              <IconButton size="small" onClick={() => setOpen(!open)}>
+                {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+              </IconButton>
+            </Grid>
+            <Grid item xs={10}>
+              <Typography variant="h6" fontSize={18}>
+                Lớp 10A1
+              </Typography>
+            </Grid>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  p: 3,
+                  boxShadow: 'none',
+                  border: 'none',
+                }}
+              >
+                <Table size="small" sx={{ borderCollapse: 'unset' }}>
+                  <TableHead>
+                    <TableRow>
+                      {headCells.map((p, index) => {
+                        return (
+                          <TableCell
+                            key={index}
+                            className={clsx(
+                              classes.tableCell,
+                              classes.tableHead,
+                              {
+                                [classes.tableCell1]: index === 0,
+                              },
+                            )}
+                            align="center"
+                            colSpan={RenderColSpan(p.id)}
+                            sx={{ minWidth: '13em' }}
+                          >
+                            {p.headerName}
+                          </TableCell>
+                        );
                       })}
-                      align="center"
-                      colSpan={RenderColSpan(p.id)}
-                      sx={{ minWidth: '13em' }}
-                    >
-                      {p.headerName}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                {headCells.map((p, index) => {
-                  return (
-                    <Fragment key={index}>{RenderCell(p.id, index)}</Fragment>
-                  );
-                })}
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+                      <TableCell className={clsx(classes.tableCell, classes.tableHead)} sx={{ minWidth: '13em' }}></TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow>
+                      {headCells.map((p, index) => {
+                        return (
+                          <Fragment key={index}>
+                            {RenderCell(p.id, index)}
+                          </Fragment>
+                        );
+                      })}
+                      <TableCell className={classes.tableCell} align='center'>
+                        <Button variant='outlined'>Cập nhật</Button>
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Collapse>
+          </Grid>
+        </Grid>
       </Box>
     </>
   );

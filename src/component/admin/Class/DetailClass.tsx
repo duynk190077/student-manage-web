@@ -27,12 +27,14 @@ interface TeachingDialog {
   selectedSubject: string;
   id: string;
   teachers: Teacher[];
+  type: string;
   onClose: () => void;
-  onChange: (subject: string, teacher: Teacher | null) => void;
+  onChange: () => void;
 }
 
 const EditTeachingDialog = (props: TeachingDialog) => {
-  const { onClose, open, selectedSubject, id, teachers, onChange } = props;
+  const { onClose, open, selectedSubject, id, teachers, onChange, type } =
+    props;
   const [teacher, setTeacher] = useState<Teacher | null>(defaultTeacher);
 
   const handleClose = () => {
@@ -45,7 +47,7 @@ const EditTeachingDialog = (props: TeachingDialog) => {
     if (teacher?.id !== '') {
       const respone = await axios({
         method: 'put',
-        url: `${BASE_URL}/teachings/${id}`,
+        url: `${BASE_URL}/${type}/${id}`,
         headers: authHeader(),
         data: {
           teacher: teacher?.id,
@@ -53,7 +55,7 @@ const EditTeachingDialog = (props: TeachingDialog) => {
       });
       if (respone.data === true) {
         onClose();
-        onChange(selectedSubject, teacher);
+        onChange();
         alert('Cập nhập thành công');
       } else alert('Cập nhập thất bại');
     }
@@ -67,7 +69,10 @@ const EditTeachingDialog = (props: TeachingDialog) => {
         textAlign: 'center',
       }}
     >
-      <DialogTitle>Cập nhật giáo viên môn {selectedSubject}</DialogTitle>
+      <DialogTitle>
+        Cập nhật giáo viên{' '}
+        {type === 'teachings' ? selectedSubject : 'chủ nhiệm'}
+      </DialogTitle>
       <DialogContent
         sx={{
           display: 'flex',
@@ -82,6 +87,9 @@ const EditTeachingDialog = (props: TeachingDialog) => {
           getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
           onChange={(event, value) => setTeacher(value)}
           sx={{
+            '& .MuiOutlinedInput-input': {
+              height: '10px',
+            },
             '& .MuiOutlinedInput-root': {
               padding: '5px 7px',
             },
@@ -119,10 +127,13 @@ function DetailClass() {
   const { id } = useParams<ParamTypes>();
   const [classroom, setClassroom] = useState<Classroom>(defaultClassroom);
   const [teachings, setTeachings] = useState<Teaching[]>([defaultTeaching]);
+  const [type, setType] = useState<string>('');
   const [teachers, setTeachers] = useState<Teacher[]>([defaultTeacher]);
   const [open, setOpen] = useState<boolean>(false);
   const [selectedSubject, setSelectedSubject] = useState('');
   const [selectedId, setSelectedId] = useState('');
+  const [updatedTeacher, setUpdatedTeacher] = useState(false);
+  const [updatedTeaching, setUpdatedTeaching] = useState(false);
   const actionColumn: GridColDef[] = [
     {
       field: 'action',
@@ -133,7 +144,7 @@ function DetailClass() {
           <Box sx={{ display: 'flex' }}>
             <Button
               variant="outlined"
-              onClick={() => handleEditClick(params.row)}
+              onClick={() => handleEditClick('teachings', params.row)}
               sx={{
                 mr: 1,
                 color: '#FFA500',
@@ -147,7 +158,6 @@ function DetailClass() {
       },
     },
   ];
-
   useEffect(() => {
     const source = axios.CancelToken.source();
     const fetchClassroom = async () => {
@@ -170,7 +180,7 @@ function DetailClass() {
     return function cleanup() {
       source.cancel();
     };
-  }, [id]);
+  }, [id, updatedTeacher]);
 
   useEffect(() => {
     const fetchTeaching = async () => {
@@ -189,15 +199,20 @@ function DetailClass() {
     };
 
     fetchTeaching();
-  }, [classroom]);
+  }, [classroom, updatedTeaching]);
 
   useEffect(() => {
     const fetchTeacher = async () => {
       try {
-        if (selectedSubject !== '') {
+        if (selectedSubject !== '' || type !== '') {
+          let url;
+          if (type === 'teachings')
+            url = `${BASE_URL}/teachers?_v=filter&subject=${selectedSubject}`;
+          else url = `${BASE_URL}/teachers`;
+          console.log(url);
           const respone = await axios({
             method: 'get',
-            url: `${BASE_URL}/teachers?subject=${selectedSubject}`,
+            url: url,
             headers: authHeader(),
           });
           setTeachers(respone.data);
@@ -207,27 +222,30 @@ function DetailClass() {
       }
     };
     fetchTeacher();
-  }, [selectedSubject]);
+  }, [selectedSubject, type]);
 
-  const handleEditClick = (teaching: any) => {
+  const handleEditClick = (type: string, teaching: any) => {
+    console.log(type);
     setOpen(true);
-    setSelectedSubject(teaching.subject);
-    setSelectedId(teaching.id);
+    setType(type);
+    if (type === 'teachings') {
+      setSelectedSubject(teaching.subject);
+      setSelectedId(teaching.id);
+    } else {
+      return;
+    }
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const handleChangeTeaching = (subject: string, teacher: Teacher | null) => {
-    let newTeachings = teachings;
-    for (let i = 0; i < newTeachings.length; i++) {
-      if (newTeachings[i].subject === subject) {
-        newTeachings[i].teacher = `${teacher?.firstName} ${teacher?.lastName}`;
-        break;
-      }
-    }
-    setTeachings(newTeachings);
+  const handleChangeTeaching = () => {
+    setUpdatedTeaching(!updatedTeaching);
+  };
+
+  const handleChangeTeacher = () => {
+    setUpdatedTeacher(!updatedTeacher);
   };
   return (
     <Box sx={{ display: 'flex' }}>
@@ -238,25 +256,32 @@ function DetailClass() {
           Lớp {classroom.name}
         </Typography>
         <Box sx={{ flexGrow: 1, bgcolor: '#fff', textAlign: 'center', p: 3 }}>
-          <Typography
-            variant="h5"
-            sx={{
-              textTransform: 'uppercase',
-            }}
-          >
-            Thông tin chi tiết
-          </Typography>
-          <hr></hr>
           <Box>
             <Box
               sx={{
+                display: 'flex',
+                alignItems: 'center',
                 textAlign: 'left',
                 pl: 1,
               }}
             >
-              <Typography variant="h6">
-                Giáo viên chủ nhiệm: {classroom.teacher}
+              <Typography variant="h6" fontSize={18} sx={{ mr: 3 }}>
+                Giáo viên chủ nhiệm:
               </Typography>
+              <Typography variant="subtitle1" sx={{ mr: 3 }}>
+                {classroom.teacher}
+              </Typography>
+              <Button
+                variant="outlined"
+                onClick={() => handleEditClick('classrooms', null)}
+                sx={{
+                  mr: 1,
+                  color: '#FFA500',
+                  border: '1px solid rgba(255, 165, 0, 0.5)',
+                }}
+              >
+                Chỉnh sửa
+              </Button>
             </Box>
             <hr></hr>
             <Box
@@ -265,7 +290,9 @@ function DetailClass() {
                 pl: 1,
               }}
             >
-              <Typography variant="h6">Giáo viên bộ môn:</Typography>
+              <Typography variant="h6" fontSize={18}>
+                Giáo viên bộ môn:
+              </Typography>
               <Box sx={{ height: '300px', width: '40%', mt: 2 }}>
                 <DataGrid
                   rows={teachings}
@@ -305,10 +332,13 @@ function DetailClass() {
       <EditTeachingDialog
         open={open}
         selectedSubject={selectedSubject}
+        type={type}
         onClose={handleClose}
         teachers={teachers}
-        id={selectedId}
-        onChange={handleChangeTeaching}
+        id={type === 'teachings' ? selectedId : id}
+        onChange={
+          type === 'teachings' ? handleChangeTeaching : handleChangeTeacher
+        }
       />
     </Box>
   );

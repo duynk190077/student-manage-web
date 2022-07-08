@@ -7,7 +7,13 @@ import {
   Divider,
   Button,
 } from '@mui/material';
-import { ChangeEvent, SyntheticEvent, useState } from 'react';
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { makeStyles } from '@mui/styles';
 
 import { BASE_URL, listClass1, listWeek } from '../../../constant';
@@ -19,86 +25,107 @@ import {
 import { useStore } from '../../../store';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import axios from 'axios';
-import { authHeader } from '../../shared/helper';
+import { authHeader, getListWeek } from '../../shared/helper';
 
 function AddTimetable() {
   const [state, dispatch] = useStore();
   const classes = useStyles();
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
 
-  const timetableField: TimetableField[] = [
-    {
-      name: 'Kỳ học',
-      field: 'semester',
-      editable: false,
-      input: true,
-      listSelect: [],
-    },
-    {
-      name: 'Tuần',
-      field: 'week',
-      editable: true,
-      select: true,
-      multiple: false,
-      listSelect: listWeek,
-    },
-    {
-      name: 'Lớp',
-      field: 'class',
-      editable: true,
-      select: true,
-      multiple: false,
-      listSelect: listClass1,
-    },
-    {
-      name: 'Thứ 2',
-      field: 'monday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 3',
-      field: 'tusday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 4',
-      field: 'wednesday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 5',
-      field: 'thursday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 6',
-      field: 'friday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 7',
-      field: 'saturday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-  ];
+  useEffect(() => {
+    if (state.semester !== '')
+      setTimetable((preState) => {
+        return {
+          ...preState,
+          semester: state.semester,
+          week: (state.week + 1).toString(),
+        };
+      });
+  }, [state]);
+
+  const timetableField: TimetableField[] = useMemo(() => {
+    return [
+      {
+        name: 'Kỳ học',
+        field: 'semester',
+        editable: false,
+        input: true,
+        listSelect: [],
+      },
+      {
+        name: 'Tuần',
+        field: 'week',
+        editable: true,
+        select: true,
+        multiple: false,
+        listSelect: getListWeek(state.week),
+      },
+      {
+        name: 'Buổi',
+        field: 'type',
+        editable: true,
+        select: true,
+        multiple: false,
+        listSelect: ['Sáng', 'Chiều'],
+      },
+      {
+        name: 'Lớp',
+        field: 'class',
+        editable: true,
+        select: true,
+        multiple: false,
+        listSelect: state.listClass,
+      },
+      {
+        name: 'Thứ 2',
+        field: 'monday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 3',
+        field: 'tusday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 4',
+        field: 'wednesday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 5',
+        field: 'thursday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 6',
+        field: 'friday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 7',
+        field: 'saturday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+    ];
+  }, [state]);
 
   const handleChangeInputTimetable =
     (prop: keyof Timetable) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -169,13 +196,14 @@ function AddTimetable() {
                         setTimetable({ ...timetable, [p.field]: newValue });
                       }}
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          className={classes.textField}
-                          label={p.name}
-                        />
+                        <TextField {...params} className={classes.textField} />
                       )}
-                      sx={{ flex: 1 }}
+                      sx={{
+                        '& .MuiOutlinedInput-input': {
+                          height: '10px',
+                        },
+                        flex: 1,
+                      }}
                     />
                   ) : (
                     <></>

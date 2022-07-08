@@ -4,4 +4,8 @@ export default interface IState {
   role: string;
   accessToken: string;
   listSubject: string[];
+  listClass: string[];
+  semester: string;
+  week: number;
+  status: string;
 }

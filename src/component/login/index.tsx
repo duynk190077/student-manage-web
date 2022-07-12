@@ -48,7 +48,14 @@ export default function Login() {
             }),
           );
           localStorage.setItem('access_token', respone.data.accessToken);
-          history.push('/');
+          localStorage.setItem('role', role);
+          if (role === 'Admin') {
+            history.push('/admin/dashboard');
+            history.go(0);
+          } else {
+            history.push('/');
+            history.go(0);
+          }
         } else setError(respone.data.error);
       });
   };

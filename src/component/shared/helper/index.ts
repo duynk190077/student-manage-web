@@ -31,8 +31,12 @@ export const validatePhoneNumber = (phoneNumber: string) => {
   return { status: false };
 };
 
-export const GetTokenFromStroage = () => {
+export const GetTokenFromStorage = () => {
   return localStorage.getItem('access_token');
+};
+
+export const GetRoleFromStorage = () => {
+  return localStorage.getItem('role');
 };
 
 export const GetIdFromStroage = () => {
@@ -40,7 +44,7 @@ export const GetIdFromStroage = () => {
 };
 
 export const authHeader = () => {
-  const token = GetTokenFromStroage();
+  const token = GetTokenFromStorage();
   return {
     Authorization: 'Bearer ' + token,
   };

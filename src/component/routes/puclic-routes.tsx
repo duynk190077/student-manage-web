@@ -1,6 +1,6 @@
 import { PUCLIC_PAGES } from '../../constant';
 import { Redirect, Route } from 'react-router-dom';
-import { authHeader, GetTokenFromStroage } from '../shared/helper';
+import { authHeader, GetTokenFromStorage } from '../shared/helper';
 import { useStore, actions } from '../../store';
 import axios from 'axios';
 import { BASE_URL } from '../../constant';
@@ -56,7 +56,7 @@ async function initState(state: any, dispatch: any) {
 
 const UserUrl = () => {
   const [state, dispatch] = useStore();
-  const auth = GetTokenFromStroage();
+  const auth = GetTokenFromStorage();
   useEffect(() => {
     if (auth) {
       initState(state, dispatch);

@@ -59,6 +59,7 @@ function TimetableStudent() {
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
 
   useEffect(() => {
+    console.log(state);
     const fetchAPI = async () => {
       if (state.userInfo !== null) {
         try {

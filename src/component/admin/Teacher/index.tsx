@@ -129,7 +129,7 @@ function Teachers() {
     setFilterTeacherRows(data);
   };
   const handleLinkClick = (name: string) => {
-    history.push(`/admin/Teacher/${name}`);
+    history.push(`/admin/teacher/${name}`);
   };
   const handleDeleteAction = async (id: string) => {
     await axios.delete(`${BASE_URL}/teachers/${id}`);

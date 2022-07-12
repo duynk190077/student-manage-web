@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import UserUrl from './component/routes/puclic-routes';
+import RouteUrls from './component/routes/routes';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { memo } from 'react';
 
@@ -17,7 +17,7 @@ function App() {
             <Route exact path="/login">
               <Login />
             </Route>
-            <UserUrl />
+            <RouteUrls />
           </Switch>
         </Router>
       </StoreProvider>

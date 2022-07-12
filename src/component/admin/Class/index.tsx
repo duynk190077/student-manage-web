@@ -48,7 +48,7 @@ function Class() {
   }, []);
 
   const handleLinkClick = (name: string) => {
-    history.push(`/Class/${name}`);
+    history.push(`/class/${name}`);
   };
 
   return (

@@ -66,7 +66,7 @@ function TimetableAdmin() {
   ];
 
   const handleLinkClick = (name: string) => {
-    history.push(`/admin/Timetable/${name}`);
+    history.push(`/admin/timetable/${name}`);
   };
 
   useEffect(() => {

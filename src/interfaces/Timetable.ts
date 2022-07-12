@@ -2,6 +2,7 @@ export interface Timetable {
   id?: string;
   semester: string;
   week: string | null;
+  type: string | null;
   class?: string | null;
   monday: string[] | null;
   tusday: string[] | null;
@@ -13,8 +14,9 @@ export interface Timetable {
 
 export const defaultTimetable: Timetable = {
   id: '',
-  semester: '20222',
+  semester: '',
   week: null,
+  type: null,
   class: null,
   monday: [],
   tusday: [],

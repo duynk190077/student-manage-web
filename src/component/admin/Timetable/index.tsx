@@ -66,7 +66,7 @@ function TimetableAdmin() {
   ];
 
   const handleLinkClick = (name: string) => {
-    history.push(`/admin/Timetable/${name}`);
+    history.push(`/admin/timetable/${name}`);
   };
 
   useEffect(() => {
@@ -113,7 +113,7 @@ function TimetableAdmin() {
                 className={classes.textField}
                 value={`20222`}
                 disabled={true}
-                label="semester"
+                label="Kỳ học"
                 sx={{ width: '100%' }}
               />
             </Grid>
@@ -136,7 +136,7 @@ function TimetableAdmin() {
                   <TextField
                     {...params}
                     className={classes.textField}
-                    label="Week"
+                    label="Tuần học"
                   />
                 )}
               />
@@ -160,7 +160,7 @@ function TimetableAdmin() {
                   <TextField
                     {...params}
                     className={classes.textField}
-                    label="Week"
+                    label="Khối"
                   />
                 )}
               />

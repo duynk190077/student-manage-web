@@ -63,23 +63,23 @@ interface AppBarProps extends MuiAppBarProps {
 
 const ListItem = [
   {
-    name: 'Dashboard',
+    name: 'dashboard',
     icon: DashboardIcon,
   },
   {
-    name: 'Student',
+    name: 'student',
     icon: PersonOutlineIcon,
   },
   {
-    name: 'Teacher',
+    name: 'teacher',
     icon: PeopleOutlineIcon,
   },
   {
-    name: 'Timetable',
+    name: 'timetable',
     icon: AccessTimeIcon,
   },
   {
-    name: 'Class',
+    name: 'class',
     icon: ClassIcon,
   },
 ];

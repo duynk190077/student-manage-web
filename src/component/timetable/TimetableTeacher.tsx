@@ -56,6 +56,7 @@ function TimetableTeacher() {
   const classes = useStyles();
   const [state, dispatch] = useStore();
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
+  const [timetable1, setTimetable1] = useState<Timetable>(defaultTimetable);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -67,7 +68,8 @@ function TimetableTeacher() {
             headers: authHeader(),
             data: {
               semester: '20222',
-              week: '1',
+              week: '2',
+              type: 'Sáng',
             },
           });
           setTimetable(respone.data);
@@ -79,7 +81,35 @@ function TimetableTeacher() {
 
     fetchAPI();
   }, [state]);
-  const getSubjectName = (field: keyof Timetable, lesson: number) => {
+
+  useEffect(() => {
+    const fetchAPI = async () => {
+      if (state.userInfo !== null) {
+        try {
+          const respone = await axios({
+            method: 'post',
+            url: `${BASE_URL}/timetables/teacher/${state.userInfo.id}`,
+            headers: authHeader(),
+            data: {
+              semester: '20222',
+              week: '2',
+              type: 'Chiều',
+            },
+          });
+          setTimetable1(respone.data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+
+    fetchAPI();
+  }, [state]);
+  const getSubjectName = (
+    field: keyof Timetable,
+    lesson: number,
+    timetable: Timetable,
+  ) => {
     if (timetable[field] === null) return '';
     if (timetable[field] === undefined) return '';
     const timetableDay: any = timetable[field];
@@ -157,7 +187,7 @@ function TimetableTeacher() {
                           key={day.headerName}
                           className={classes.tableCell}
                         >
-                          {getSubjectName(day.field, lesson)}
+                          {getSubjectName(day.field, lesson, timetable)}
                         </TableCell>
                       );
                     })}
@@ -172,24 +202,17 @@ function TimetableTeacher() {
                   Chiều
                 </TableCell>
                 <TableCell className={classes.tableCell}></TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  Toán
-                </TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  Toán
-                </TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  Toán
-                </TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  Toán
-                </TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  Toán
-                </TableCell>
-                <TableCell className={classes.tableCell} align="center">
-                  Toán
-                </TableCell>
+                {days.map((day, index) => {
+                  return (
+                    <TableCell
+                      align="center"
+                      key={day.headerName}
+                      className={classes.tableCell}
+                    >
+                      {getSubjectName(day.field, 1, timetable1)}
+                    </TableCell>
+                  );
+                })}
               </TableRow>
             </TableBody>
           </Table>

@@ -1,17 +1,17 @@
 import Home from '../component/home';
 import IRoute from '../interfaces/Route';
-import Dashboard from '../component/admin/Dashboard';
-import Teachers from '../component/admin/Teacher/index';
-import EditTeacher from '../component/admin/Teacher/EditTeacher';
-import Class from '../component/admin/Class';
-import UpdateProfile from '../component/student/UpdateProfile';
+import Dashboard from '../component/admin/dashboard';
+import Teachers from '../component/admin/teacher/index';
+import EditTeacher from '../component/admin/teacher/EditTeacher';
+import Class from '../component/admin/class';
+import UpdateProfile from '../component/update-profile';
 import ChangePassword from '../component/user/ChangePassword';
 import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import DetailClass from '../component/admin/Class/DetailClass';
+import DetailClass from '../component/admin/class/DetailClass';
 import Timetable from '../component/timetable';
-import TimetableAdmin from '../component/admin/Timetable';
+import TimetableAdmin from '../component/admin/timetable';
 import { Box, Typography } from '@mui/material';
-import EditTimetable from '../component/admin/Timetable/EditTimetable';
+import EditTimetable from '../component/admin/timetable/EditTimetable';
 import Mark from '../component/mark/Mark';
 
 export const PUCLIC_PAGES: IRoute[] = [
@@ -21,53 +21,18 @@ export const PUCLIC_PAGES: IRoute[] = [
     exact: true,
   },
   {
-    component: Dashboard,
-    path: '/admin/Dashboard',
-    exact: true,
-  },
-  {
-    component: Teachers,
-    path: '/admin/Teacher',
-    exact: true,
-  },
-  {
-    component: EditTeacher,
-    path: '/admin/Teacher/:id',
-    exact: false,
-  },
-  {
-    component: Class,
-    path: '/admin/Class',
-    exact: true,
-  },
-  {
     component: UpdateProfile,
-    path: '/Students/UpdateProfile',
+    path: '/update-profile',
     exact: true,
   },
   {
     component: ChangePassword,
-    path: '/Users/ChangePassword',
-    exact: true,
-  },
-  {
-    component: DetailClass,
-    path: '/Class/:id',
+    path: '/users/change-password',
     exact: true,
   },
   {
     component: Timetable,
     path: '/timetable',
-    exact: true,
-  },
-  {
-    component: TimetableAdmin,
-    path: '/admin/Timetable',
-    exact: true,
-  },
-  {
-    component: EditTimetable,
-    path: '/admin/Timetable/:id',
     exact: true,
   },
   {
@@ -77,29 +42,65 @@ export const PUCLIC_PAGES: IRoute[] = [
   },
 ];
 
+export const PRIVATE_PAGES: IRoute[] = [
+  {
+    component: Dashboard,
+    path: '/admin/dashboard',
+    exact: true,
+  },
+  {
+    component: Teachers,
+    path: '/admin/teacher',
+    exact: true,
+  },
+  {
+    component: EditTeacher,
+    path: '/admin/teacher/:id',
+    exact: false,
+  },
+  {
+    component: Class,
+    path: '/admin/class',
+    exact: true,
+  },
+  {
+    component: TimetableAdmin,
+    path: '/admin/timetable',
+    exact: true,
+  },
+  {
+    component: EditTimetable,
+    path: '/admin/timetable/:id',
+    exact: true,
+  },
+  {
+    component: DetailClass,
+    path: 'admin/class/:id',
+    exact: true,
+  },
+];
 export const teacherColumns: GridColDef[] = [
   //{field: 'id', headerName: 'ID', hideable: false, width: 100},
-  { field: 'firstName', headerName: 'FirstName', width: 150 },
-  { field: 'lastName', headerName: 'LastName', width: 100 },
+  { field: 'firstName', headerName: 'Họ và tên đệm', width: 150 },
+  { field: 'lastName', headerName: 'Tên', width: 100 },
   {
     field: 'fullName',
-    headerName: 'FullName',
+    headerName: 'Họ và Tên',
     sortable: false,
     width: 170,
     valueGetter: (params: GridValueGetterParams) =>
       `${params.row.firstName || ''} ${params.row.lastName || ''}`,
   },
-  { field: 'gender', headerName: 'Gender', width: 70 },
+  { field: 'gender', headerName: 'Giới tính', width: 70 },
   {
     field: 'dateofBirth',
     type: 'dateTime',
-    headerName: 'Date of Birth',
+    headerName: 'Ngày sinh',
     width: 120,
     valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),
   },
   { field: 'email', headerName: 'Email', width: 200 },
-  { field: 'subject', headerName: 'SubJect', width: 100 },
-  { field: 'class', headerName: 'Class', width: 100 },
+  { field: 'subject', headerName: 'Môn dạy', width: 100 },
 ];
 
 export const classColumns: GridColDef[] = [

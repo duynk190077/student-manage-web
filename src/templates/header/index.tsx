@@ -15,7 +15,6 @@ import clsx from 'clsx';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import LOGO2 from './img/LOGO2.png';
-import Avatars from '../../component/home/img/avatarStudent.png';
 import axios from 'axios';
 import {
   AVATAR_STUDENT_URL,
@@ -66,7 +65,7 @@ const TooltipUser = (props: any) => {
   const history = useHistory();
   return (
     <List>
-      <ListItemButton component={Link} to="/Students/UpdateProfile">
+      <ListItemButton component={Link} to="/UpdateProfile">
         Cập nhật thông tin cá nhân
       </ListItemButton>
       <ListItemButton component={Link} to="/Users/ChangePassword">
@@ -120,10 +119,10 @@ function Header(props: any) {
         sx={{ marginRight: 1 }}
       />
     );
-  }, [state.userInfo]);
+  }, [state]);
   const menuList = useMemo(() => {
     return state?.role === 'Student' ? menuListStudent : menuListTeacher;
-  }, [state.role]);
+  }, [state?.role]);
 
   return (
     <header className={classes.header}>

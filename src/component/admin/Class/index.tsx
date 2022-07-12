@@ -15,7 +15,7 @@ function Class() {
   const actionColumn: GridColDef[] = [
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: '',
       width: 200,
       renderCell: (params: GridValueGetterParams) => {
         return (
@@ -48,7 +48,7 @@ function Class() {
   }, []);
 
   const handleLinkClick = (name: string) => {
-    history.push(`/Class/${name}`);
+    history.push(`/class/${name}`);
   };
 
   return (
@@ -59,14 +59,7 @@ function Class() {
         <Typography variant="h4" sx={{ mb: 3 }}>
           Danh sách lớp
         </Typography>
-        <Button
-          variant="contained"
-          sx={{ mb: 3 }}
-          onClick={() => handleLinkClick('Add')}
-        >
-          Thêm lớp mới
-        </Button>
-        <Box sx={{ height: 400, width: '100%' }}>
+        <Box sx={{ height: 400, width: '100%', bgcolor: '#fff', p: 3 }}>
           <DataGrid
             rows={classrooms}
             columns={classColumns.concat(actionColumn)}

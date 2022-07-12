@@ -9,12 +9,16 @@ import {
   TableBody,
   TableRow,
 } from '@mui/material';
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 
-import { StudentMark } from '../../interfaces/StudetMark';
+import { defaultStudentMark, StudentMark } from '../../interfaces/StudetMark';
 import Header from '../../templates/header';
 import clsx from 'clsx';
+import { useStore } from '../../store';
+import axios from 'axios';
+import { BASE_URL } from '../../constant';
+import { authHeader } from '../shared/helper';
 
 interface HeadCell {
   id: keyof StudentMark;
@@ -40,24 +44,42 @@ const headCells: HeadCell[] = [
   },
 ];
 
-const rows: StudentMark = {
-  semester: '20222',
-  subject: 'Toán',
-  factor1: [5, 6, 7, 8, 8],
-  factor2: [5, 7, 8, 10],
-  factor3: [3],
-};
-
 function StudentMarks() {
   const classes = useStyles();
+  const [state, dispatch] = useStore();
+  const [studentMarks, setStudentMarks] = useState<StudentMark[]>([
+    defaultStudentMark,
+  ]);
+
+  useEffect(() => {
+    const fetchAPI = async () => {
+      if (state.userInfo !== null && state.semester !== '') {
+        try {
+          const respone = await axios({
+            method: 'get',
+            url: `${BASE_URL}/student-marks/student/${state.userInfo._id}?semester=${state.semester}`,
+            headers: authHeader(),
+          });
+          if (respone.data !== false) setStudentMarks(respone.data);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    };
+
+    fetchAPI();
+  }, [state.semester]);
 
   const RenderColSpan = (field: keyof StudentMark) => {
-    if (field === 'subject') return 1;
-    const factor: any = rows[field];
-    return factor.length;
+    if (field === 'subject' || field === 'factor3') return 1;
+    return 5;
   };
 
-  const RenderCell = (field: keyof StudentMark, id: number) => {
+  const RenderCell = (
+    field: keyof StudentMark,
+    id: number,
+    studentMark: StudentMark,
+  ) => {
     if (field === 'subject')
       return (
         <TableCell
@@ -67,10 +89,12 @@ function StudentMarks() {
           })}
           align="center"
         >
-          {rows[field]}
+          {studentMark[field]}
         </TableCell>
       );
-    const factor: any = rows[field];
+    const factor: any = studentMark[field];
+    const colSpan = RenderColSpan(field);
+    while (factor.length < colSpan) factor.push('');
     return factor.map((p: any, index: any) => {
       return (
         <TableCell
@@ -122,13 +146,19 @@ function StudentMarks() {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                {headCells.map((p, index) => {
-                  return (
-                    <Fragment key={index}>{RenderCell(p.id, index)}</Fragment>
-                  );
-                })}
-              </TableRow>
+              {studentMarks.map((studentMark, index) => {
+                return (
+                  <TableRow key={index}>
+                    {headCells.map((p, index) => {
+                      return (
+                        <Fragment key={index}>
+                          {RenderCell(p.id, index, studentMark)}
+                        </Fragment>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </TableContainer>

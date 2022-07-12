@@ -1,7 +1,7 @@
 import { PRIVATE_PAGES } from '../../constant';
 import { Redirect, Route } from 'react-router-dom';
 import { GetRoleFromStorage, GetTokenFromStorage } from '../shared/helper';
-import { useStore } from '../../store';
+import React from 'react';
 
 const AdminUrl = () => {
   const auth = GetTokenFromStorage();

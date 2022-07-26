@@ -4,9 +4,6 @@ import {
   Box,
   Button,
   Typography,
-  Stack,
-  Autocomplete,
-  TextField,
   Dialog,
   DialogActions,
   DialogContent,
@@ -17,20 +14,12 @@ import { useState, memo, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-import {
-  teacherColumns,
-  listProperty,
-  listGender,
-  listSubJect,
-  BASE_URL,
-} from '../../../constant';
+import { teacherColumns, BASE_URL } from '../../../constant';
 import Teacher from '../../../interfaces/Teacher';
 import { authHeader } from '../../shared/helper';
 
 function Teachers() {
   const [teachers, setTeachers] = useState<any>([]);
-  const [subject, setSubject] = useState<string | null>('');
-  const [gender, setGender] = useState<string | null>('');
   const [open, setOpen] = useState<boolean>(false);
   const [idSelected, setIdSelected] = useState<string | ''>('');
   const [filterTeacherRows, setFilterTeacherRows] = useState<Teacher[]>([]);
@@ -48,14 +37,14 @@ function Teachers() {
               onClick={() => handleLinkClick(params.row.id)}
               sx={{ mr: 1 }}
             >
-              View
+              Chi tiết
             </Button>
             <Button
               variant="outlined"
               onClick={() => handleClickOpen(params.row.id)}
               sx={{ color: '#ef5050' }}
             >
-              Delete
+              Xóa
             </Button>
           </Box>
         );
@@ -76,39 +65,6 @@ function Teachers() {
     fetchAPI();
   }, []);
 
-  const autoCompleteProps = (arr: string[]) => {
-    const Props = {
-      options: arr.map((p) => p),
-    };
-    return Props;
-  };
-  const subJectProps = autoCompleteProps(listSubJect);
-
-  const genderProps = autoCompleteProps(listGender);
-
-  const setProps = (name: string) => {
-    switch (name) {
-      case 'Subject': {
-        return subJectProps;
-      }
-      default: {
-        return genderProps;
-      }
-    }
-  };
-  const setValueOption = (name: string, value: string | null) => {
-    switch (name) {
-      case 'Subject': {
-        setSubject(value);
-        break;
-      }
-      default: {
-        setGender(value);
-        break;
-      }
-    }
-  };
-
   const handleClickOpen = (id: string) => {
     setIdSelected(id);
     setOpen(true);
@@ -118,16 +74,6 @@ function Teachers() {
     setOpen(false);
   };
 
-  const handleFilterClick = () => {
-    let data: Teacher[] = teachers;
-    if (subject) {
-      data = data.filter((element) => element.subject === subject);
-    }
-    if (gender) {
-      data = data.filter((element) => element.gender === gender);
-    }
-    setFilterTeacherRows(data);
-  };
   const handleLinkClick = (name: string) => {
     history.push(`/admin/teacher/${name}`);
   };

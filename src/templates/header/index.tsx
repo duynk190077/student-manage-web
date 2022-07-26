@@ -65,10 +65,10 @@ const TooltipUser = (props: any) => {
   const history = useHistory();
   return (
     <List>
-      <ListItemButton component={Link} to="/UpdateProfile">
+      <ListItemButton component={Link} to="/update-profile">
         Cập nhật thông tin cá nhân
       </ListItemButton>
-      <ListItemButton component={Link} to="/Users/ChangePassword">
+      <ListItemButton component={Link} to="/users/change-password">
         Đổi mật khẩu
       </ListItemButton>
       <ListItemButton

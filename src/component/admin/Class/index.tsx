@@ -25,10 +25,7 @@ function Class() {
               sx={{ mr: 1 }}
               onClick={() => handleLinkClick(params.row.id)}
             >
-              View
-            </Button>
-            <Button variant="outlined" sx={{ color: '#ef5050' }}>
-              Delete
+              Chi tiết
             </Button>
           </Box>
         );
@@ -48,7 +45,7 @@ function Class() {
   }, []);
 
   const handleLinkClick = (name: string) => {
-    history.push(`/class/${name}`);
+    history.push(`/admin/class/${name}`);
   };
 
   return (
@@ -59,12 +56,12 @@ function Class() {
         <Typography variant="h4" sx={{ mb: 3 }}>
           Danh sách lớp
         </Typography>
-        <Box sx={{ height: 400, width: '100%', bgcolor: '#fff', p: 3 }}>
+        <Box sx={{ height: 650, width: '100%', bgcolor: '#fff', p: 3 }}>
           <DataGrid
             rows={classrooms}
             columns={classColumns.concat(actionColumn)}
-            pageSize={5}
-            rowsPerPageOptions={[5]}
+            pageSize={9}
+            rowsPerPageOptions={[9]}
             checkboxSelection
             disableSelectionOnClick
           />

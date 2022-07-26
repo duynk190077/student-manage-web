@@ -19,7 +19,7 @@ import ParamTypes from '../../../interfaces/ParamTypes';
 import { authHeader } from '../../shared/helper';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import { BASE_URL, studentColumns, teachingColumns } from '../../../constant';
-import { defaultTeaching, Teaching } from '../../../interfaces/Teaching';
+import Teaching, { defaultTeaching } from '../../../interfaces/Teaching';
 import Teacher, { defaultTeacher } from '../../../interfaces/Teacher';
 
 interface TeachingDialog {

@@ -60,15 +60,15 @@ function TimetableTeacher() {
 
   useEffect(() => {
     const fetchAPI = async () => {
-      if (state.userInfo !== null) {
+      if (state.userInfo !== null && state.semester !== '') {
         try {
           const respone = await axios({
             method: 'post',
             url: `${BASE_URL}/timetables/teacher/${state.userInfo.id}`,
             headers: authHeader(),
             data: {
-              semester: '20222',
-              week: '2',
+              semester: state.semester,
+              week: state.week,
               type: 'Sáng',
             },
           });
@@ -84,15 +84,15 @@ function TimetableTeacher() {
 
   useEffect(() => {
     const fetchAPI = async () => {
-      if (state.userInfo !== null) {
+      if (state.userInfo !== null && state.semester !== '') {
         try {
           const respone = await axios({
             method: 'post',
             url: `${BASE_URL}/timetables/teacher/${state.userInfo.id}`,
             headers: authHeader(),
             data: {
-              semester: '20222',
-              week: '2',
+              semester: state.semester,
+              week: state.week,
               type: 'Chiều',
             },
           });

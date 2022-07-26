@@ -1,6 +1,8 @@
 export default interface Student {
   id?: string;
   user: string;
+  firstName: string;
+  lastName: string;
   fullName: string;
   gender: string;
   dateofBirth: Date | '' | null;
@@ -11,12 +13,15 @@ export default interface Student {
   permanentResidence: string;
   religion: string;
   parents: string[];
+  yearJoin?: number;
   image?: string;
 }
 
 export const defaultStudent: Student = {
   id: '',
   user: '',
+  firstName: '',
+  lastName: '',
   fullName: '',
   gender: '',
   dateofBirth: '',

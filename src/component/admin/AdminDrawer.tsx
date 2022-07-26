@@ -20,9 +20,10 @@ import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ClassIcon from '@mui/icons-material/Class';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import { useHistory } from 'react-router-dom';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import { useHistory, useLocation } from 'react-router-dom';
 import SchoolIcon from '@mui/icons-material/School';
-import { Avatar } from '@mui/material';
+import { Avatar, Tooltip } from '@mui/material';
 import Avatars from './img/Avatars.jpg';
 
 const drawerWidth = 240;
@@ -63,24 +64,34 @@ interface AppBarProps extends MuiAppBarProps {
 
 const ListItem = [
   {
-    name: 'dashboard',
+    name: 'Trang chủ',
+    id: 'dashboard',
     icon: DashboardIcon,
   },
   {
-    name: 'student',
+    name: 'Học sinh',
+    id: 'student',
     icon: PersonOutlineIcon,
   },
   {
-    name: 'teacher',
+    name: 'Giáo viên',
+    id: 'teacher',
     icon: PeopleOutlineIcon,
   },
   {
-    name: 'timetable',
+    name: 'Thời khóa biểu',
+    id: 'timetable',
     icon: AccessTimeIcon,
   },
   {
-    name: 'class',
+    name: 'Lớp học',
+    id: 'class',
     icon: ClassIcon,
+  },
+  {
+    name: 'Phân công nhiệm vụ',
+    id: 'teaching',
+    icon: AdminPanelSettingsIcon,
   },
 ];
 const AppBar = styled(MuiAppBar, {
@@ -118,8 +129,30 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+const TooltipUser = () => {
+  const history = useHistory();
+  return (
+    <List>
+      <ListItemButton
+        onClick={(e: React.SyntheticEvent) => {
+          localStorage.clear();
+          history.push('/login');
+          history.go(0);
+        }}
+      >
+        Đăng xuất
+      </ListItemButton>
+    </List>
+  );
+};
+
 function AdminDrawer(props: any) {
   const theme = useTheme();
+  const location = useLocation();
+  const selectedIndex = React.useMemo(() => {
+    const selectedId = location.pathname.split('/')[2];
+    return ListItem.findIndex((Item) => Item.id === selectedId);
+  }, [location]);
   const [open, setOpen] = React.useState(false);
   const history = useHistory();
 
@@ -160,12 +193,19 @@ function AdminDrawer(props: any) {
               Thanh Thủy High School
             </Typography>
           </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', ml: 3, mr: 3 }}>
-            <Avatar alt="admin" src={Avatars} />
-            <Typography variant="inherit" noWrap component="div" sx={{ ml: 1 }}>
-              admin
-            </Typography>
-          </Box>
+          <Tooltip title={<TooltipUser />} placement="bottom" arrow>
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 3, mr: 3 }}>
+              <Avatar alt="admin" src={Avatars} />
+              <Typography
+                variant="inherit"
+                noWrap
+                component="div"
+                sx={{ ml: 1 }}
+              >
+                admin
+              </Typography>
+            </Box>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -180,12 +220,13 @@ function AdminDrawer(props: any) {
         </DrawerHeader>
         <Divider />
         <List>
-          {ListItem.map((Item) => {
+          {ListItem.map((Item, index) => {
             const Component = Item.icon;
             return (
               <ListItemButton
+                selected={selectedIndex === index}
                 key={Item.name}
-                onClick={() => handleOnClick(Item.name)}
+                onClick={() => handleOnClick(Item.id)}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',

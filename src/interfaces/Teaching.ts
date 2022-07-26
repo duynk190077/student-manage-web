@@ -1,15 +1,15 @@
-export interface Teaching {
+export default interface Teaching {
   id?: string;
-  semester: string;
-  class: string;
-  subject: string;
-  teacher: string;
+  semester: string | null;
+  class: string | null;
+  subject: string | null;
+  teacher: string | null;
 }
 
 export const defaultTeaching: Teaching = {
   id: '',
   semester: '',
-  class: '',
-  subject: '',
-  teacher: '',
+  class: null,
+  subject: null,
+  teacher: null,
 };

@@ -13,6 +13,8 @@ import TimetableAdmin from '../component/admin/timetable';
 import { Box, Typography } from '@mui/material';
 import EditTimetable from '../component/admin/timetable/EditTimetable';
 import Mark from '../component/mark/Mark';
+import StudentAdmin from '../component/admin/student';
+import TeachingAdmin from '../component/admin/teaching';
 
 export const PUCLIC_PAGES: IRoute[] = [
   {
@@ -75,7 +77,17 @@ export const PRIVATE_PAGES: IRoute[] = [
   },
   {
     component: DetailClass,
-    path: 'admin/class/:id',
+    path: '/admin/class/:id',
+    exact: true,
+  },
+  {
+    component: StudentAdmin,
+    path: '/admin/student',
+    exact: true,
+  },
+  {
+    component: TeachingAdmin,
+    path: '/admin/teaching',
     exact: true,
   },
 ];

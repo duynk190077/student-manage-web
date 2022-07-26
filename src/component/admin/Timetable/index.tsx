@@ -10,24 +10,24 @@ import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import { makeStyles } from '@mui/styles';
 
-import {
-  BASE_URL,
-  listWeek,
-  timetableColumns1,
-  classGroup,
-} from '../../../constant';
+import { BASE_URL, timetableColumns1, classGroup } from '../../../constant';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import { Link, useHistory } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { defaultTimetable, Timetable } from '../../../interfaces/Timetable';
 import axios from 'axios';
-import { authHeader } from '../../shared/helper';
+import { authHeader, getListWeek } from '../../shared/helper';
+import { useStore } from '../../../store';
 
+const typesArr = ['Sáng', 'Chiều'];
 function TimetableAdmin() {
+  const [state, dispatch] = useStore();
   const classes = useStyles();
   const history = useHistory();
   const [timetables, setTimetable] = useState<Timetable[]>([defaultTimetable]);
   const [filter, setFilter] = useState<any>({
+    semester: '',
+    type: 'Sáng',
     week: '1',
     classGroup: '10',
   });
@@ -43,7 +43,7 @@ function TimetableAdmin() {
   const actionColumn: GridColDef[] = [
     {
       field: 'action',
-      headerName: 'Thao tác',
+      headerName: '',
       width: 120,
       renderCell: (params: GridValueGetterParams) => {
         return (
@@ -71,16 +71,28 @@ function TimetableAdmin() {
 
   useEffect(() => {
     const fectAPI = async () => {
-      const respone = await axios({
-        method: 'get',
-        url: `${BASE_URL}/timetables?_v=filter&semester=20222&week=${filter.week}&class-group=${filter.classGroup}`,
-        headers: authHeader(),
-      });
-      setTimetable(respone.data);
+      if (filter.semester !== '') {
+        const respone = await axios({
+          method: 'get',
+          url: `${BASE_URL}/timetables?_v=filter&semester=${filter.semester}&week=${filter.week}&class-group=${filter.classGroup}&type=${filter.type}`,
+          headers: authHeader(),
+        });
+        setTimetable(respone.data);
+      }
     };
 
     fectAPI();
   }, [filter]);
+
+  useEffect(() => {
+    if (state.semester !== null) {
+      setFilter({
+        ...filter,
+        semester: state.semester,
+        week: state.week.toString(),
+      });
+    }
+  }, [state.semester]);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -108,20 +120,20 @@ function TimetableAdmin() {
           }}
         >
           <Grid container sx={{ mb: 3 }} spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <TextField
                 className={classes.textField}
-                value={`20222`}
+                value={filter.semester}
                 disabled={true}
                 label="Kỳ học"
                 sx={{ width: '100%' }}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
               <Autocomplete
                 className={classes.textField}
                 value={filter.week}
-                options={listWeek}
+                options={getListWeek(state.week)}
                 getOptionLabel={(option) => option}
                 freeSolo
                 onChange={(event: any, newValue) => {
@@ -141,7 +153,31 @@ function TimetableAdmin() {
                 )}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item xs={3}>
+              <Autocomplete
+                className={classes.textField}
+                options={typesArr}
+                freeSolo
+                value={filter.type}
+                onChange={(event, newValue) =>
+                  setFilter({ ...filter, type: newValue })
+                }
+                getOptionLabel={(option) => option}
+                sx={{
+                  '& .MuiOutlinedInput-input': {
+                    height: '10px',
+                  },
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    className={classes.textField}
+                    {...params}
+                    label="Buổi"
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={3}>
               <Autocomplete
                 className={classes.textField}
                 value={filter.classGroup}

@@ -61,6 +61,6 @@ export const validateTeacher = (teacher: Teacher) => {
 
 export const getListWeek = (week: number) => {
   let listWeek: string[] = [];
-  for (let i = 1; i <= 6; i++) listWeek.push((week + i).toString());
+  for (let i = 0; i <= 5; i++) listWeek.push((week + i).toString());
   return listWeek;
 };

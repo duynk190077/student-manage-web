@@ -48,6 +48,7 @@ function StudentUpdateProfile() {
       field: 'fullName',
       input: true,
       editable: false,
+      listSelect: [],
     },
     {
       name: 'Giới tính',
@@ -55,42 +56,49 @@ function StudentUpdateProfile() {
       editable: true,
       radio: true,
       listRadio: listGender,
+      listSelect: [],
     },
     {
       name: 'Ngày sinh',
       field: 'dateofBirth',
       editable: true,
       date: true,
+      listSelect: [],
     },
     {
       name: 'Số điện thoại',
       field: 'phoneNumber',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Dân tộc',
       field: 'nation',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Tôn giáo',
       field: 'religion',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Địa chỉ',
       field: 'address',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Hộ khẩu',
       field: 'permanentResidence',
       editable: true,
       input: true,
+      listSelect: [],
     },
   ];
   const parentField: ParentField[] = [

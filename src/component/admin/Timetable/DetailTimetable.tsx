@@ -51,7 +51,15 @@ function DetailTimetable() {
       editable: false,
       select: true,
       multiple: false,
-      listSelect: listClass1,
+      listSelect: state.listClass,
+    },
+    {
+      name: 'Buổi',
+      field: 'type',
+      editable: false,
+      select: true,
+      multiple: false,
+      listSelect: ['Sáng', 'Chiều'],
     },
     {
       name: 'Thứ 2',

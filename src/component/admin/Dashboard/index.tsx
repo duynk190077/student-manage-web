@@ -7,13 +7,15 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import PersonIcon from '@mui/icons-material/Person';
 import ManIcon from '@mui/icons-material/Man';
 import WomanIcon from '@mui/icons-material/Woman';
 import UpdateIcon from '@mui/icons-material/Update';
 import AddIcon from '@mui/icons-material/Add';
 import PeopleIcon from '@mui/icons-material/People';
+import GradeIcon from '@mui/icons-material/Grade';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import { useStore } from '../../../store';
@@ -25,9 +27,11 @@ import {
 import axios from 'axios';
 import { BASE_URL } from '../../../constant';
 import { authHeader } from '../../shared/helper';
+import { useHistory } from 'react-router-dom';
 
 const statusArr = ['Đang diễn ra', 'Kết thúc'];
 export default function Dashboard() {
+  const history = useHistory();
   const [state, dispatch] = useStore();
   const [semester, setSemester] = useState<Semester>(defaultSemester);
   const [semesterAnalytic, setSemesterAnalytic] = useState<SemesterAnalytic>(
@@ -100,6 +104,43 @@ export default function Dashboard() {
     fetchAPI();
   }, [semester.semester]);
 
+  const handleSemsterResult = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (semester.status === 'Kết thúc') {
+      const respone = await axios({
+        method: 'get',
+        url: `${BASE_URL}/semesters/get-result/${semester.semester}`,
+        headers: authHeader(),
+      });
+
+      if (respone.data !== false)
+        setSemesterAnalytic((preState) => {
+          return {
+            ...preState,
+            ...respone.data,
+          };
+        });
+      await axios({
+        method: 'put',
+        url: `${BASE_URL}/students/update-many`,
+        headers: authHeader(),
+      });
+    }
+  };
+
+  const handleCreateSemester = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    const respone = await axios({
+      method: 'post',
+      url: `${BASE_URL}/semesters/start`,
+      headers: authHeader(),
+    });
+    if (respone.data !== false) {
+      alert('Kỳ học mới khởi tạo thành công');
+      history.go(0);
+    } else alert('Kỳ học mới khởi tạo thất bại');
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <AdminDrawer name="Dashboard" />
@@ -108,7 +149,12 @@ export default function Dashboard() {
         <Typography variant="h4" noWrap component="div" sx={{ mb: 3 }}>
           Trang chủ
         </Typography>
-        <Button variant="contained" sx={{ mb: 2 }} startIcon={<AddIcon />}>
+        <Button
+          variant="contained"
+          sx={{ mb: 2 }}
+          startIcon={<AddIcon />}
+          onClick={handleCreateSemester}
+        >
           Bắt đầu kỳ học mới
         </Button>
         <Box sx={{ bgcolor: '#fff', p: 3 }}>
@@ -140,6 +186,7 @@ export default function Dashboard() {
                 onChange={(event, newValue) =>
                   setSemester({ ...semester, status: newValue })
                 }
+                disabled={state.status !== 'Đang diễn ra'}
                 getOptionLabel={(option) => option}
                 sx={{
                   '& .MuiOutlinedInput-input': {
@@ -160,6 +207,8 @@ export default function Dashboard() {
                 variant="contained"
                 startIcon={<UpdateIcon />}
                 sx={{ height: '100%', fontSize: '12px' }}
+                onClick={handleSemsterResult}
+                disabled={state.status === 'Kết thúc'}
               >
                 Cập nhật trạng thái
               </Button>
@@ -200,6 +249,32 @@ export default function Dashboard() {
                 bgcolor="#e1f1ff"
               />
             </Grid>
+            {semester.status === 'Kết thúc' && (
+              <>
+                {semesterAnalytic?.excellentStudent !== undefined && (
+                  <Grid item xs={3}>
+                    <RenderAnalytic
+                      title="Học sinh giỏi"
+                      total={semesterAnalytic.excellentStudent}
+                      Icon={GradeIcon}
+                      color="#ff00fa"
+                      bgcolor="#c300ff"
+                    />
+                  </Grid>
+                )}
+                {semesterAnalytic?.goodStudent !== undefined && (
+                  <Grid item xs={3}>
+                    <RenderAnalytic
+                      title="Học sinh khá"
+                      total={semesterAnalytic.goodStudent}
+                      Icon={ThumbUpAltIcon}
+                      color="#fffe00"
+                      bgcolor="#ffe000"
+                    />
+                  </Grid>
+                )}
+              </>
+            )}
           </Grid>
         </Box>
       </Box>

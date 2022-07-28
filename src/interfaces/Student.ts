@@ -7,6 +7,7 @@ export default interface Student {
   gender: string;
   dateofBirth: Date | '' | null;
   phoneNumber: string;
+  class?: string;
   nation: string;
   nationId: string;
   address: string;
@@ -42,5 +43,7 @@ export interface StudentField {
   input?: boolean;
   radio?: boolean;
   date?: boolean;
+  select?: boolean;
+  listSelect: readonly any[];
   listRadio?: any[];
 }

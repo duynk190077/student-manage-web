@@ -23,6 +23,7 @@ import {
 } from '../../constant';
 import { actions, useStore } from '../../store';
 import { initState } from '../../store/reducer';
+import { authHeader } from '../../component/shared/helper';
 const menuListStudent = [
   {
     name: 'Trang chủ',
@@ -77,6 +78,7 @@ const TooltipUser = (props: any) => {
           axios({
             method: 'post',
             url: `${BASE_URL}/users/logout`,
+            headers: authHeader(),
             data: {
               id: props.id,
             },

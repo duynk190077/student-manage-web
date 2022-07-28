@@ -3,6 +3,8 @@ export interface SemesterAnalytic {
   totalTeacher: number;
   totalStudentMale: number;
   totalStudentFemale: number;
+  excellentStudent?: number;
+  goodStudent?: number;
 }
 
 export const defaultSemesterAnalytic: SemesterAnalytic = {

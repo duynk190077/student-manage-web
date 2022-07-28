@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormControlLabel,
   Button,
+  Autocomplete,
 } from '@mui/material';
 import { useState, ChangeEvent, SyntheticEvent } from 'react';
 import { BASE_URL, listGender } from '../../../constant';
@@ -24,8 +25,10 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { makeStyles } from '@mui/styles';
 import axios from 'axios';
 import { authHeader } from '../../shared/helper';
+import { useStore } from '../../../store';
 
 function StudentAdmin() {
+  const [state, dispatch] = useStore();
   const classes = useStyles();
   const [student, setStudent] = useState<Student | any>(defaultStudent);
   const [father, setFather] = useState<Parent | any>(defaultParent);
@@ -36,12 +39,14 @@ function StudentAdmin() {
       field: 'firstName',
       input: true,
       editable: true,
+      listSelect: [],
     },
     {
       name: 'Tên',
       field: 'lastName',
       input: true,
       editable: true,
+      listSelect: [],
     },
     {
       name: 'Giới tính',
@@ -49,54 +54,70 @@ function StudentAdmin() {
       editable: true,
       radio: true,
       listRadio: listGender,
+      listSelect: [],
     },
     {
       name: 'Ngày sinh',
       field: 'dateofBirth',
       editable: true,
       date: true,
+      listSelect: [],
     },
     {
       name: 'Số điện thoại',
       field: 'phoneNumber',
       editable: true,
       input: true,
+      listSelect: [],
+    },
+    {
+      name: 'Lớp',
+      field: 'class',
+      editable: true,
+      select: true,
+      listSelect: state.listClass,
     },
     {
       name: 'Dân tộc',
       field: 'nation',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'CCCD',
       field: 'nationId',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Tôn giáo',
       field: 'religion',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Địa chỉ',
       field: 'address',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Hộ khẩu',
       field: 'permanentResidence',
       editable: true,
       input: true,
+      listSelect: [],
     },
     {
       name: 'Năm vào trường',
       field: 'yearJoin',
       editable: true,
       input: true,
+      listSelect: [],
     },
   ];
   const fatherField: ParentField[] = [
@@ -249,7 +270,7 @@ function StudentAdmin() {
                     })}
                   </RadioGroup>
                 </FormControl>
-              ) : (
+              ) : p?.date === true ? (
                 <Box
                   key={index}
                   sx={{
@@ -279,6 +300,43 @@ function StudentAdmin() {
                       )}
                     />
                   </LocalizationProvider>
+                </Box>
+              ) : (
+                <Box
+                  key={index}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    width: '100%',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: '150px',
+                    }}
+                  >
+                    <Typography variant="subtitle1">{p.name}:*</Typography>
+                  </Box>
+                  <Autocomplete
+                    className={classes.textField}
+                    value={student[p.field]}
+                    options={p.listSelect}
+                    getOptionLabel={(option) => option}
+                    freeSolo
+                    disabled={!p.editable}
+                    onChange={(event: any, newValue) => {
+                      setStudent({ ...student, [p.field]: newValue });
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} className={classes.textField} />
+                    )}
+                    sx={{
+                      '& .MuiOutlinedInput-input': {
+                        height: '10px',
+                      },
+                      flex: 1,
+                    }}
+                  />
                 </Box>
               );
             })}

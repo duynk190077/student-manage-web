@@ -94,6 +94,7 @@ function StudentMarks() {
       );
     const factor: any = studentMark[field];
     const colSpan = RenderColSpan(field);
+    console.log(factor.length, colSpan);
     while (factor.length < colSpan) factor.push('');
     return factor.map((p: any, index: any) => {
       return (

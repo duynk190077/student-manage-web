@@ -70,19 +70,22 @@ function TeacherMark() {
   const [teacherMarks, setTeacherMarks] = useState<MarkTeacher[]>([
     defaultTeacherMark,
   ]);
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean[]>([false]);
 
   useEffect(() => {
     const fetchAPI = async () => {
       if (state.userInfo !== null && state.semester !== '') {
         try {
           const respone = await axios.get(
-            `${BASE_URL}/teachers/student-mark/${state.userInfo.id}?semester=20222`,
+            `${BASE_URL}/teachers/student-mark/${state.userInfo.id}?semester=${state.semester}`,
             {
               headers: authHeader(),
             },
           );
           setTeacherMarks(respone.data);
+          let check: boolean[] = [];
+          for (let i = 0; i < respone.data.length; i++) check.push(false);
+          setOpen(check);
         } catch (err) {
           console.log(err);
         }
@@ -226,13 +229,14 @@ function TeacherMark() {
                 spacing={2}
                 sx={{
                   border: '1px solid #eee',
-                  pb: () => (open === true ? 0 : 1),
+                  pb: () => (open[i] === true ? 0 : 1),
+                  mb: 4,
                   boxShadow:
                     '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)',
                 }}
               >
                 <Grid item xs={1}>
-                  <IconButton size="small" onClick={() => setOpen(!open)}>
+                  <IconButton size="small" onClick={() => setOpen({...open, [i]: !open[i]})}>
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                   </IconButton>
                 </Grid>
@@ -241,7 +245,7 @@ function TeacherMark() {
                     Lớp {teacherMark.class}
                   </Typography>
                 </Grid>
-                <Collapse in={open} timeout="auto" unmountOnExit>
+                <Collapse in={open[i]} timeout="auto" unmountOnExit>
                   <TableContainer
                     component={Paper}
                     sx={{

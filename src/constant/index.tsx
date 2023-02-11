@@ -1,6 +1,6 @@
 import Home from '../component/home';
 import IRoute from '../interfaces/Route';
-import Dashboard from '../component/admin/dashboard';
+import Dashboard from '../component/admin/dashboard/index';
 import Teachers from '../component/admin/teacher/index';
 import EditTeacher from '../component/admin/teacher/EditTeacher';
 import Class from '../component/admin/class';

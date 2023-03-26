@@ -236,7 +236,10 @@ function TeacherMark() {
                 }}
               >
                 <Grid item xs={1}>
-                  <IconButton size="small" onClick={() => setOpen({...open, [i]: !open[i]})}>
+                  <IconButton
+                    size="small"
+                    onClick={() => setOpen({ ...open, [i]: !open[i] })}
+                  >
                     {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
                   </IconButton>
                 </Grid>

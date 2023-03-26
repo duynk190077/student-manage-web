@@ -26,8 +26,11 @@ import { useStore } from '../../../store';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import axios from 'axios';
 import { authHeader, getListWeek } from '../../shared/helper';
+import { useParams } from 'react-router-dom';
+import ParamTypes from '../../../interfaces/ParamTypes';
 
-function AddTimetable() {
+function TimetableForm() {
+  const { id } = useParams<ParamTypes>();
   const [state, dispatch] = useStore();
   const classes = useStyles();
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
@@ -42,6 +45,19 @@ function AddTimetable() {
         };
       });
   }, [state]);
+
+  useEffect(() => {
+    const fetchAPI = async () => {
+      const respone = await axios({
+        method: 'get',
+        url: `${BASE_URL}/timetables/${id}`,
+      });
+      setTimetable(respone.data);
+    };
+    if (id !== 'Add') {
+      fetchAPI();
+    }
+  }, [])
 
   const timetableField: TimetableField[] = useMemo(() => {
     return [
@@ -134,20 +150,40 @@ function AddTimetable() {
 
   const handleAddTimetable = async (event: SyntheticEvent) => {
     event.preventDefault();
-    const respone = await axios({
-      method: 'post',
-      url: `${BASE_URL}/timetables`,
-      headers: authHeader(),
-      data: {
-        ...timetable,
-      },
-    });
-
-    if (respone.data !== false) {
-      alert('Thêm thời khóa biểu thành công');
-      //setTimetable(defaultTimetable);
+    if (id === 'Add') {
+      const respone = await axios({
+        method: 'post',
+        url: `${BASE_URL}/timetables`,
+        headers: authHeader(),
+        data: {
+          ...timetable,
+        },
+      });
+      if (respone.data !== false) {
+        alert('Thêm thời khóa biểu thành công');
+        //setTimetable(defaultTimetable);
+      } else {
+        alert('Thêm thời khóa biểu thất bại');
+      }
     } else {
-      alert('Thêm thời khóa biểu thất bại');
+      if (timetable.semester === '') alert('Không được trống');
+      else {
+        const respone = await axios({
+          method: 'put',
+          url: `${BASE_URL}/timetables/${id}`,
+          headers: authHeader(),
+          data: {
+            ...timetable,
+          },
+        });
+
+        if (respone.data !== false) {
+          alert('Cập nhật thời khóa biểu thành công');
+          //setTimetable(defaultTimetable);
+        } else {
+          alert('Cập nhật thời khóa biểu thất bại');
+        }
+      }
     }
   };
   return (
@@ -237,4 +273,4 @@ const useStyles = makeStyles({
     },
   },
 });
-export default AddTimetable;
+export default TimetableForm;

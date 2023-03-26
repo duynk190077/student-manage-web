@@ -178,6 +178,7 @@ const useStyles = makeStyles({
     justifyContent: 'center',
     alignItems: 'center',
     padding: '15px',
+    height: '100%',
     background: 'linear-gradient(-135deg, #c850c0, #4158d0)',
   },
   wrapLogin: {

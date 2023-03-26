@@ -1,20 +1,17 @@
 import Home from '../component/home';
 import IRoute from '../interfaces/Route';
-import Dashboard from '../component/admin/dashboard';
-import Teachers from '../component/admin/teacher/index';
-import EditTeacher from '../component/admin/teacher/EditTeacher';
-import Class from '../component/admin/class';
+import { DetailClass, ListClass } from '../component/admin/class';
 import UpdateProfile from '../component/update-profile';
 import ChangePassword from '../component/user/ChangePassword';
 import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import DetailClass from '../component/admin/class/DetailClass';
 import Timetable from '../component/timetable';
-import TimetableAdmin from '../component/admin/timetable';
 import { Box, Typography } from '@mui/material';
-import EditTimetable from '../component/admin/timetable/EditTimetable';
 import Mark from '../component/mark/Mark';
-import StudentAdmin from '../component/admin/student';
-import TeachingAdmin from '../component/admin/teaching';
+import { Dashboard } from '../component/admin/dashboard';
+import { ListTeacher, TeacherForm } from '../component/admin/teacher';
+import { ListTimetable, TimetableForm } from '../component/admin/timetable';
+import { StudentForm } from '../component/admin/student';
+import { TeachingForm } from '../component/admin/teaching';
 
 export const PUCLIC_PAGES: IRoute[] = [
   {
@@ -22,6 +19,7 @@ export const PUCLIC_PAGES: IRoute[] = [
     path: '/',
     exact: true,
   },
+  
   {
     component: UpdateProfile,
     path: '/update-profile',
@@ -51,27 +49,27 @@ export const PRIVATE_PAGES: IRoute[] = [
     exact: true,
   },
   {
-    component: Teachers,
+    component: ListTeacher,
     path: '/admin/teacher',
     exact: true,
   },
   {
-    component: EditTeacher,
+    component: TeacherForm,
     path: '/admin/teacher/:id',
     exact: false,
   },
   {
-    component: Class,
+    component: ListClass,
     path: '/admin/class',
     exact: true,
   },
   {
-    component: TimetableAdmin,
+    component: ListTimetable,
     path: '/admin/timetable',
     exact: true,
   },
   {
-    component: EditTimetable,
+    component: TimetableForm,
     path: '/admin/timetable/:id',
     exact: true,
   },
@@ -81,12 +79,12 @@ export const PRIVATE_PAGES: IRoute[] = [
     exact: true,
   },
   {
-    component: StudentAdmin,
+    component: StudentForm,
     path: '/admin/student',
     exact: true,
   },
   {
-    component: TeachingAdmin,
+    component: TeachingForm,
     path: '/admin/teaching',
     exact: true,
   },

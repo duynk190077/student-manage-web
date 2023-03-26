@@ -24,8 +24,11 @@ import {
 } from '../../shared/helper';
 import CusTextField from '../../shared/TextField';
 import { useStore } from '../../../store';
+import { useParams } from 'react-router-dom';
+import ParamTypes from '../../../interfaces/ParamTypes';
 
-function AddTeacher() {
+function TeacherForm() {
+  const { id } = useParams<ParamTypes>();
   const classes = useStyle();
   const [state, dispatch] = useStore();
   const [teacher, setTeacher] = useState<Teacher>({
@@ -39,6 +42,14 @@ function AddTeacher() {
     image: '',
   });
 
+  useEffect(() => {
+    if (id !== 'Add') {
+      axios
+      .get(`${BASE_URL}/teachers/${id}`)
+      .then((respone) => setTeacher(respone.data));
+    }
+  }, [])
+
   const handleChangeInput =
     (prop: keyof Teacher) => (event: ChangeEvent<HTMLInputElement>) => {
       setTeacher({ ...teacher, [prop]: event.target.value });
@@ -49,17 +60,21 @@ function AddTeacher() {
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     if (!validateTeacher(teacher)) {
-      const respone = await axios.post(
-        `${BASE_URL}/teachers`,
-        { ...teacher },
-        {
-          headers: authHeader(),
-        },
-      );
-      if (respone.data !== false) {
-        alert('Add teacher successfully');
-        setTeacher(defaultTeacher);
-      } else alert('Add teacher fail');
+      if ( id === "Add") {
+        const respone = await axios.post(
+          `${BASE_URL}/teachers`,
+          { ...teacher },
+          {
+            headers: authHeader(),
+          },
+        );
+        if (respone.data !== false) {
+          alert('Add teacher successfully');
+          setTeacher(defaultTeacher);
+        } else alert('Add teacher fail');
+      } else {
+        axios.put(`${BASE_URL}/teachers/${id}`, { teacher });
+      }
     } else alert('Input is in valid');
   };
 
@@ -240,4 +255,4 @@ const useStyle = makeStyles({
   },
 });
 
-export default memo(AddTeacher);
+export default memo(TeacherForm);

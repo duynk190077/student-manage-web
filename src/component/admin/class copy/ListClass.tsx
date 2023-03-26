@@ -7,10 +7,10 @@ import { authHeader } from '../../shared/helper';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import { BASE_URL, classColumns } from '../../../constant';
 import Classroom from '../../../interfaces/Class';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function ListClass() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const actionColumn: GridColDef[] = [
     {
@@ -45,7 +45,7 @@ function ListClass() {
   }, []);
 
   const handleLinkClick = (name: string) => {
-    history.push(`/admin/class/${name}`);
+    navigate(`/admin/class/${name}`);
   };
 
   return (

@@ -1,17 +1,17 @@
-import Home from '../component/home';
 import IRoute from '../interfaces/Route';
-import { DetailClass, ListClass } from '../component/admin/class';
+import { DetailClass, ListClass } from '../component/admin/class copy';
 import UpdateProfile from '../component/update-profile';
 import ChangePassword from '../component/user/ChangePassword';
 import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import Timetable from '../component/timetable';
 import { Box, Typography } from '@mui/material';
 import Mark from '../component/mark/Mark';
-import { Dashboard } from '../component/admin/dashboard';
-import { ListTeacher, TeacherForm } from '../component/admin/teacher';
-import { ListTimetable, TimetableForm } from '../component/admin/timetable';
 import { StudentForm } from '../component/admin/student';
 import { TeachingForm } from '../component/admin/teaching';
+import { Dashboard } from '../component/admin/dashboard copy';
+import { ListTeacher, TeacherForm } from '../component/admin/teacher copy';
+import { ListTimetable, TimetableForm } from '../component/admin/timetable copy';
+import { Home } from '../component/home';
 
 export const PUCLIC_PAGES: IRoute[] = [
   {
@@ -19,7 +19,6 @@ export const PUCLIC_PAGES: IRoute[] = [
     path: '/',
     exact: true,
   },
-  
   {
     component: UpdateProfile,
     path: '/update-profile',

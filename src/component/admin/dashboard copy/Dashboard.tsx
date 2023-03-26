@@ -27,11 +27,11 @@ import {
   import axios from 'axios';
   import { BASE_URL } from '../../../constant';
   import { authHeader } from '../../shared/helper';
-  import { useHistory } from 'react-router-dom';
+  import { useNavigate } from 'react-router-dom';
   
   const statusArr = ['Đang diễn ra', 'Kết thúc'];
   export default function Dashboard() {
-    const history = useHistory();
+    const navigate = useNavigate();
     const [state, dispatch] = useStore();
     const [semester, setSemester] = useState<Semester>(defaultSemester);
     const [semesterAnalytic, setSemesterAnalytic] = useState<SemesterAnalytic>(
@@ -137,7 +137,7 @@ import {
       });
       if (respone.data !== false) {
         alert('Kỳ học mới khởi tạo thành công');
-        history.go(0);
+        navigate(0);
       } else alert('Kỳ học mới khởi tạo thất bại');
     };
   

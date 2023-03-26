@@ -1,5 +1,5 @@
 import { PUCLIC_PAGES } from '../../constant';
-import { Redirect, Route } from 'react-router-dom';
+import { Navigate, Route } from 'react-router-dom';
 import { authHeader, GetTokenFromStorage } from '../shared/helper';
 import { useStore, actions } from '../../store';
 import axios from 'axios';
@@ -66,19 +66,12 @@ const UserUrl = () => {
   const publicR = PUCLIC_PAGES.map((p) => {
     const Component = p.component;
     return (
-      <Route
-        key={p.path}
-        path={p.path}
-        exact={p.exact}
-        render={(props) =>
-          auth ? (
-            <Component {...props} />
-          ) : (
-            <Redirect to={{ pathname: '/login' }} />
-          )
-        }
+      <Route 
+        key={p.path} 
+        path={p.path} 
+        element={(!auth) ? <Navigate to={'/login'} /> : <Component />}
       />
-    );
+    )
   });
   return <>{publicR}</>;
 };

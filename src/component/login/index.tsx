@@ -16,7 +16,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
 import { useState, ChangeEvent, SyntheticEvent } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import LOGO from './img/LOGO.png';
 import { BASE_URL, roles } from '../../constant';
@@ -29,7 +29,7 @@ export default function Login() {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleChangeRole = (event: ChangeEvent<HTMLInputElement>) => {
     setRole((event.target as HTMLInputElement).value);
@@ -50,11 +50,11 @@ export default function Login() {
           localStorage.setItem('access_token', respone.data.accessToken);
           localStorage.setItem('role', role);
           if (role === 'Admin') {
-            history.push('/admin/dashboard');
-            history.go(0);
+            navigate('/admin/dashboard');
+            navigate(0);
           } else {
-            history.push('/');
-            history.go(0);
+            navigate('/');
+            navigate(0);
           }
         } else setError(respone.data.error);
       });

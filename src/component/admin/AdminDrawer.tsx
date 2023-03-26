@@ -21,7 +21,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import ClassIcon from '@mui/icons-material/Class';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import SchoolIcon from '@mui/icons-material/School';
 import { Avatar, Tooltip } from '@mui/material';
 import Avatars from './img/Avatars.jpg';
@@ -130,14 +130,14 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 const TooltipUser = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <List>
       <ListItemButton
         onClick={(e: React.SyntheticEvent) => {
           localStorage.clear();
-          history.push('/login');
-          history.go(0);
+          navigate('/login');
+          navigate(0);
         }}
       >
         Đăng xuất
@@ -154,7 +154,7 @@ function AdminDrawer(props: any) {
     return ListItem.findIndex((Item) => Item.id === selectedId);
   }, [location]);
   const [open, setOpen] = React.useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -165,7 +165,7 @@ function AdminDrawer(props: any) {
   };
 
   const handleOnClick = (name: string) => {
-    history.push(`/admin/${name}`);
+    navigate(`/admin/${name}`);
   };
   return (
     <>

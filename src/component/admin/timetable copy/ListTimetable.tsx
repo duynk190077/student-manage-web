@@ -12,7 +12,7 @@ import {
   
   import { BASE_URL, timetableColumns1, classGroup } from '../../../constant';
   import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
-  import { Link, useHistory } from 'react-router-dom';
+  import { Link, useNavigate } from 'react-router-dom';
   import { useEffect, useState } from 'react';
   import { defaultTimetable, Timetable } from '../../../interfaces/Timetable';
   import axios from 'axios';
@@ -23,7 +23,7 @@ import {
   function ListTimetable() {
     const [state, dispatch] = useStore();
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [timetables, setTimetable] = useState<Timetable[]>([defaultTimetable]);
     const [filter, setFilter] = useState<any>({
       semester: '',
@@ -66,7 +66,7 @@ import {
     ];
   
     const handleLinkClick = (name: string) => {
-      history.push(`/admin/timetable/${name}`);
+      navigate(`/admin/timetable/${name}`);
     };
   
     useEffect(() => {

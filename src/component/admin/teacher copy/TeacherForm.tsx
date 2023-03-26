@@ -25,7 +25,7 @@ import {
 import CusTextField from '../../shared/TextField';
 import { useStore } from '../../../store';
 import { useParams } from 'react-router-dom';
-import ParamTypes from '../../../interfaces/ParamTypes';
+import { ParamTypes } from '../../../interfaces/ParamTypes';
 
 function TeacherForm() {
   const { id } = useParams<ParamTypes>();

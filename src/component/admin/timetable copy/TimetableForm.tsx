@@ -27,7 +27,7 @@ import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import axios from 'axios';
 import { authHeader, getListWeek } from '../../shared/helper';
 import { useParams } from 'react-router-dom';
-import ParamTypes from '../../../interfaces/ParamTypes';
+import { ParamTypes } from '../../../interfaces/ParamTypes';
 
 function TimetableForm() {
   const { id } = useParams<ParamTypes>();

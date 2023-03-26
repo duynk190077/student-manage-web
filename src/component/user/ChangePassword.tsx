@@ -6,7 +6,7 @@ import Header from '../../templates/header';
 import axios from 'axios';
 import { BASE_URL } from '../../constant';
 import { useStore } from '../../store';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 interface Password {
   oldPassword: string;
@@ -16,7 +16,7 @@ interface Password {
 
 function ChangePassword() {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [state, dispatch] = useStore();
   const [password, SetPassword] = useState<Password>({
     oldPassword: '',
@@ -50,8 +50,8 @@ function ChangePassword() {
             },
           });
           localStorage.clear();
-          history.push('/login');
-          history.go(0);
+          navigate('/login');
+          navigate(0);
         } else {
           alert('Thay đổi mật khẩu thất bại');
         }

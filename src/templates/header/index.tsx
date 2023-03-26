@@ -8,7 +8,7 @@ import {
   Avatar,
   Tooltip,
 } from '@mui/material';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { memo, SyntheticEvent, useMemo } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import clsx from 'clsx';
@@ -63,7 +63,7 @@ const menuListTeacher = [
 ];
 
 const TooltipUser = (props: any) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   return (
     <List>
       <ListItemButton component={Link} to="/update-profile">
@@ -86,8 +86,8 @@ const TooltipUser = (props: any) => {
             if (respone.data?.error === undefined) {
               props.dispatch(actions.setState(initState));
               localStorage.clear();
-              history.push('/login');
-              history.go(0);
+              navigate('/login');
+              navigate(0);
             }
           });
         }}

@@ -11,7 +11,7 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { useState, memo, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { teacherColumns, BASE_URL } from '../../../constant';
@@ -23,7 +23,7 @@ function ListTeacher() {
   const [open, setOpen] = useState<boolean>(false);
   const [idSelected, setIdSelected] = useState<string | ''>('');
   const [filterTeacherRows, setFilterTeacherRows] = useState<Teacher[]>([]);
-  const history = useHistory();
+  const navigate = useNavigate();
   const actionColumn: GridColDef[] = [
     {
       field: 'action',
@@ -75,7 +75,7 @@ function ListTeacher() {
   };
 
   const handleLinkClick = (name: string) => {
-    history.push(`/admin/teacher/${name}`);
+    navigate(`/admin/teacher/${name}`);
   };
   const handleDeleteAction = async (id: string) => {
     await axios.delete(`${BASE_URL}/teachers/${id}`);

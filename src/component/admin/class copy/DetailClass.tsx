@@ -15,7 +15,7 @@ import axios from 'axios';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 import Classroom, { defaultClassroom } from '../../../interfaces/Class';
-import ParamTypes from '../../../interfaces/ParamTypes';
+import { ParamTypes } from '../../../interfaces/ParamTypes';
 import { authHeader } from '../../shared/helper';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import { BASE_URL, studentColumns, teachingColumns } from '../../../constant';
@@ -25,7 +25,7 @@ import Teacher, { defaultTeacher } from '../../../interfaces/Teacher';
 interface TeachingDialog {
   open: boolean;
   selectedSubject: string;
-  id: string;
+  id: string | undefined;
   teachers: Teacher[];
   type: string;
   onClose: () => void;

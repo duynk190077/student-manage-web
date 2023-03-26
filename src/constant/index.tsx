@@ -1,5 +1,5 @@
 import IRoute from '../interfaces/Route';
-import { DetailClass, ListClass } from '../component/admin/class copy';
+import { DetailClass, ListClass } from '../component/admin/class';
 import UpdateProfile from '../component/update-profile';
 import ChangePassword from '../component/user/ChangePassword';
 import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
@@ -8,9 +8,9 @@ import { Box, Typography } from '@mui/material';
 import Mark from '../component/mark/Mark';
 import { StudentForm } from '../component/admin/student';
 import { TeachingForm } from '../component/admin/teaching';
-import { Dashboard } from '../component/admin/dashboard copy';
-import { ListTeacher, TeacherForm } from '../component/admin/teacher copy';
-import { ListTimetable, TimetableForm } from '../component/admin/timetable copy';
+import { Dashboard } from '../component/admin/dashboard';
+import { ListTeacher, TeacherForm } from '../component/admin/teacher';
+import { ListTimetable, TimetableForm } from '../component/admin/timetable';
 import { Home } from '../component/home';
 
 export const PUCLIC_PAGES: IRoute[] = [

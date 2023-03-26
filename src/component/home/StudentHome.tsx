@@ -4,8 +4,8 @@ import { useMemo } from 'react';
 import { useStore } from '../../store';
 import avatarStudent from './img/avatarStudent.png';
 import { AVATAR_STUDENT_URL } from '../../constant';
-import DetailStudent from './DetailStudent';
-import DetailPersonal from './DetailPersonal';
+import DetailStudent from './DetailStudent copy';
+import DetailPersonal from './DetailPersonal copy';
 
 function StudentHome() {
   const [state, dispatch] = useStore();

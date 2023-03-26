@@ -19,6 +19,7 @@ export const PUCLIC_PAGES: IRoute[] = [
     path: '/',
     exact: true,
   },
+  
   {
     component: UpdateProfile,
     path: '/update-profile',

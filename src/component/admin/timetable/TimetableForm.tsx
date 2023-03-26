@@ -7,7 +7,13 @@ import {
   Divider,
   Button,
 } from '@mui/material';
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { makeStyles } from '@mui/styles';
 
 import { BASE_URL, listClass1, listWeek } from '../../../constant';
@@ -19,125 +25,26 @@ import {
 import { useStore } from '../../../store';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import axios from 'axios';
-import { authHeader } from '../../shared/helper';
+import { authHeader, getListWeek } from '../../shared/helper';
 import { useParams } from 'react-router-dom';
 import ParamTypes from '../../../interfaces/ParamTypes';
 
-function DetailTimetable() {
+function TimetableForm() {
   const { id } = useParams<ParamTypes>();
   const [state, dispatch] = useStore();
   const classes = useStyles();
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
 
-  const timetableField: TimetableField[] = [
-    {
-      name: 'Kỳ học',
-      field: 'semester',
-      editable: false,
-      input: true,
-      listSelect: [],
-    },
-    {
-      name: 'Tuần',
-      field: 'week',
-      editable: false,
-      select: true,
-      multiple: false,
-      listSelect: listWeek,
-    },
-    {
-      name: 'Lớp',
-      field: 'class',
-      editable: false,
-      select: true,
-      multiple: false,
-      listSelect: state.listClass,
-    },
-    {
-      name: 'Buổi',
-      field: 'type',
-      editable: false,
-      select: true,
-      multiple: false,
-      listSelect: ['Sáng', 'Chiều'],
-    },
-    {
-      name: 'Thứ 2',
-      field: 'monday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 3',
-      field: 'tusday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 4',
-      field: 'wednesday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 5',
-      field: 'thursday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 6',
-      field: 'friday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-    {
-      name: 'Thứ 7',
-      field: 'saturday',
-      editable: true,
-      select: true,
-      multiple: true,
-      listSelect: state.listSubject,
-    },
-  ];
-
-  const handleChangeInputTimetable =
-    (prop: keyof Timetable) => (event: ChangeEvent<HTMLInputElement>) => {
-      setTimetable({ ...timetable, [prop]: event.target.value });
-    };
-
-  const handleUpdateTimetable = async (event: SyntheticEvent) => {
-    event.preventDefault();
-
-    if (timetable.semester === '') alert('Không được trống');
-    else {
-      const respone = await axios({
-        method: 'put',
-        url: `${BASE_URL}/timetables/${id}`,
-        headers: authHeader(),
-        data: {
-          ...timetable,
-        },
+  useEffect(() => {
+    if (state.semester !== '')
+      setTimetable((preState) => {
+        return {
+          ...preState,
+          semester: state.semester,
+          week: (state.week + 1).toString(),
+        };
       });
-
-      if (respone.data !== false) {
-        alert('Cập nhật thời khóa biểu thành công');
-        //setTimetable(defaultTimetable);
-      } else {
-        alert('Cập nhật thời khóa biểu thất bại');
-      }
-    }
-  };
+  }, [state]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -147,16 +54,145 @@ function DetailTimetable() {
       });
       setTimetable(respone.data);
     };
+    if (id !== 'Add') {
+      fetchAPI();
+    }
+  }, [])
 
-    fetchAPI();
-  }, [id]);
+  const timetableField: TimetableField[] = useMemo(() => {
+    return [
+      {
+        name: 'Kỳ học',
+        field: 'semester',
+        editable: false,
+        input: true,
+        listSelect: [],
+      },
+      {
+        name: 'Tuần',
+        field: 'week',
+        editable: true,
+        select: true,
+        multiple: false,
+        listSelect: getListWeek(state.week),
+      },
+      {
+        name: 'Buổi',
+        field: 'type',
+        editable: true,
+        select: true,
+        multiple: false,
+        listSelect: ['Sáng', 'Chiều'],
+      },
+      {
+        name: 'Lớp',
+        field: 'class',
+        editable: true,
+        select: true,
+        multiple: false,
+        listSelect: state.listClass,
+      },
+      {
+        name: 'Thứ 2',
+        field: 'monday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 3',
+        field: 'tusday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 4',
+        field: 'wednesday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 5',
+        field: 'thursday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 6',
+        field: 'friday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+      {
+        name: 'Thứ 7',
+        field: 'saturday',
+        editable: true,
+        select: true,
+        multiple: true,
+        listSelect: state.listSubject,
+      },
+    ];
+  }, [state]);
+
+  const handleChangeInputTimetable =
+    (prop: keyof Timetable) => (event: ChangeEvent<HTMLInputElement>) => {
+      setTimetable({ ...timetable, [prop]: event.target.value });
+    };
+
+  const handleAddTimetable = async (event: SyntheticEvent) => {
+    event.preventDefault();
+    if (id === 'Add') {
+      const respone = await axios({
+        method: 'post',
+        url: `${BASE_URL}/timetables`,
+        headers: authHeader(),
+        data: {
+          ...timetable,
+        },
+      });
+      if (respone.data !== false) {
+        alert('Thêm thời khóa biểu thành công');
+        //setTimetable(defaultTimetable);
+      } else {
+        alert('Thêm thời khóa biểu thất bại');
+      }
+    } else {
+      if (timetable.semester === '') alert('Không được trống');
+      else {
+        const respone = await axios({
+          method: 'put',
+          url: `${BASE_URL}/timetables/${id}`,
+          headers: authHeader(),
+          data: {
+            ...timetable,
+          },
+        });
+
+        if (respone.data !== false) {
+          alert('Cập nhật thời khóa biểu thành công');
+          //setTimetable(defaultTimetable);
+        } else {
+          alert('Cập nhật thời khóa biểu thất bại');
+        }
+      }
+    }
+  };
   return (
     <Box sx={{ display: 'flex' }}>
       <AdminDrawer name="Timetable" />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Typography variant="h4" noWrap component="div" sx={{ mb: 2 }}>
-          Cập nhật thời khóa biểu
+          Thêm thời khóa biểu
         </Typography>
         <Box sx={{ bgcolor: '#fff', p: 3, flexGrow: 1 }}>
           <Stack direction="column" spacing={2} sx={{ mb: 3 }}>
@@ -191,17 +227,12 @@ function DetailTimetable() {
                       options={p.listSelect}
                       getOptionLabel={(option) => option}
                       freeSolo
-                      disabled={!p.editable}
                       multiple={p?.multiple}
                       onChange={(event: any, newValue) => {
                         setTimetable({ ...timetable, [p.field]: newValue });
                       }}
                       renderInput={(params) => (
-                        <TextField
-                          {...params}
-                          className={classes.textField}
-                          label={p.name}
-                        />
+                        <TextField {...params} className={classes.textField} />
                       )}
                       sx={{
                         '& .MuiOutlinedInput-input': {
@@ -220,10 +251,10 @@ function DetailTimetable() {
           <Divider />
           <Button
             variant="contained"
-            onClick={handleUpdateTimetable}
+            onClick={handleAddTimetable}
             sx={{ mt: 3 }}
           >
-            Cập nhật thời khóa biểu
+            Thêm thời khóa biểu
           </Button>
         </Box>
       </Box>
@@ -242,4 +273,4 @@ const useStyles = makeStyles({
     },
   },
 });
-export default DetailTimetable;
+export default TimetableForm;

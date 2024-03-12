@@ -15,49 +15,49 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import { Link } from 'react-router-dom';
 import { useState, ChangeEvent, SyntheticEvent } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import LOGO from './img/LOGO.png';
-import { BASE_URL, roles } from '../../constant';
-import { useStore, actions } from '../../store';
+import { roles } from '../../constant';
+import { login } from '../../redux/userSlice';
+import { useAppDispatch } from '../../redux/store';
+import LocalStorage from '../../service/LocalStorage';
 
 export default function Login() {
   const classes = useStyles();
-  const [state, dispatch] = useStore();
   const [role, setRole] = useState<string>(roles[0].name);
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const handleChangeRole = (event: ChangeEvent<HTMLInputElement>) => {
     setRole((event.target as HTMLInputElement).value);
   };
 
-  const handleLogin = (event: SyntheticEvent) => {
+  const handleLogin = async (event: SyntheticEvent) => {
     event.preventDefault();
-    axios
-      .post(`${BASE_URL}/users/login`, { username, password, role })
-      .then((respone) => {
-        if (respone.data?.error === undefined) {
-          dispatch(
-            actions.setState({
-              ...respone.data,
-              role: role,
-            }),
-          );
-          localStorage.setItem('access_token', respone.data.accessToken);
-          localStorage.setItem('role', role);
-          if (role === 'Admin') {
-            navigate('/admin/dashboard');
-            navigate(0);
-          } else {
-            navigate('/');
-            navigate(0);
-          }
-        } else setError(respone.data.error);
-      });
+    const result = await dispatch(login({ username, password, role }));
+    if (login.fulfilled.match(result)) {
+      const user = result.payload;
+      console.log(user);
+      if (!user.userId) {
+        setError(user.error);
+      } else {
+        LocalStorage.updateLocalAccessToken(user.accessToken);
+        LocalStorage.updateRole(role);
+        LocalStorage.updateUserId(user.userId);
+        if (role === 'Admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/');
+        }
+        navigate(0);
+      }
+    } else {
+      // show alert error
+    }
   };
 
   return (
@@ -163,7 +163,6 @@ export default function Login() {
     </Box>
   );
 }
-
 const useStyles = makeStyles({
   '@keyframes animShadow': {
     to: {

@@ -13,6 +13,12 @@ import { ListTeacher, TeacherForm } from '../component/admin/teacher';
 import { ListTimetable, TimetableForm } from '../component/admin/timetable';
 import { Home } from '../component/home';
 
+export const BASE_URL = 'http://localhost:3000';
+
+export const AVATAR_STUDENT_URL = 'http://localhost:3000/students/avatar';
+
+export const AVATAR_TEACHER_URL = 'http://localhost:3000/teachers/avatar';
+
 export const PUCLIC_PAGES: IRoute[] = [
   {
     component: Home,
@@ -256,9 +262,3 @@ export const roles = [
     value: 'Quản trị viên',
   },
 ];
-
-export const BASE_URL = 'http://localhost:3000';
-
-export const AVATAR_STUDENT_URL = 'http://localhost:3000/students/avatar';
-
-export const AVATAR_TEACHER_URL = 'http://localhost:3000/teachers/avatar';

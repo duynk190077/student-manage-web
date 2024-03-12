@@ -1,13 +1,14 @@
-import { useStore } from '../../store';
+import { useMemo } from 'react';
 import TimetableStudent from './TimetableStudent';
 import TimetableTeacher from './TimetableTeacher';
+import LocalStorage from '../../service/LocalStorage';
 
 function Timetable() {
-  const [state, dispatch] = useStore();
+  const role = useMemo(() => {
+    return LocalStorage.getRole();
+  }, []);
   return (
-    <>
-      {state?.role === 'Student' ? <TimetableStudent /> : <TimetableTeacher />}
-    </>
+    <>{role === 'Student' ? <TimetableStudent /> : <TimetableTeacher />}</>
   );
 }
 

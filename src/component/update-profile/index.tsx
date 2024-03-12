@@ -1,15 +1,14 @@
-import { useStore } from '../../store';
 import TeacherUpdateProfile from '../teacher/TeacherUpdateProfile';
 import StudentUpdateProfile from '../student/StudentUpdateProfile';
+import { useMemo } from 'react';
+import LocalStorage from '../../service/LocalStorage';
 function UpdateProfile() {
-  const [state, dispatch] = useStore();
+  const role = useMemo(() => {
+    return LocalStorage.getRole();
+  }, []);
   return (
     <>
-      {state?.role === 'Student' ? (
-        <StudentUpdateProfile />
-      ) : (
-        <TeacherUpdateProfile />
-      )}
+      {role === 'Student' ? <StudentUpdateProfile /> : <TeacherUpdateProfile />}
     </>
   );
 }

@@ -15,15 +15,9 @@ import clsx from 'clsx';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import LOGO2 from './img/LOGO2.png';
-import axios from 'axios';
-import {
-  AVATAR_STUDENT_URL,
-  AVATAR_TEACHER_URL,
-  BASE_URL,
-} from '../../constant';
-import { actions, useStore } from '../../store';
-import { initState } from '../../store/reducer';
-import { authHeader } from '../../component/shared/helper';
+import { AVATAR_STUDENT_URL, AVATAR_TEACHER_URL } from '../../constant';
+import LocalStorage from '../../service/LocalStorage';
+import { useSelector } from 'react-redux';
 const menuListStudent = [
   {
     name: 'Trang chủ',
@@ -75,21 +69,8 @@ const TooltipUser = (props: any) => {
       <ListItemButton
         onClick={(e: SyntheticEvent) => {
           e.preventDefault();
-          axios({
-            method: 'post',
-            url: `${BASE_URL}/users/logout`,
-            headers: authHeader(),
-            data: {
-              id: props.id,
-            },
-          }).then((respone) => {
-            if (respone.data?.error === undefined) {
-              props.dispatch(actions.setState(initState));
-              localStorage.clear();
-              navigate('/login');
-              navigate(0);
-            }
-          });
+          LocalStorage.clearLocalStorage();
+          navigate(0);
         }}
       >
         Đăng xuất
@@ -101,19 +82,19 @@ const TooltipUser = (props: any) => {
 function Header(props: any) {
   const { id } = props;
   const classes = useStyles();
-  const [state, dispatch] = useStore();
+  const user = useSelector((state: any) => state.user.user);
   const RenderAvatar = useMemo(() => {
-    if (state.userInfo === null)
+    if (user?.userInfo === null)
       return (
         <AccountCircleIcon fontSize="large" sx={{ color: '#ccc', mr: 1 }} />
       );
-    const imageName = state.userInfo?.image;
+    const imageName = user?.userInfo?.image;
     if (imageName === '' || imageName === undefined)
       return (
         <AccountCircleIcon fontSize="large" sx={{ color: '#ccc', mr: 1 }} />
       );
     const url =
-      state?.role === 'Student' ? AVATAR_STUDENT_URL : AVATAR_TEACHER_URL;
+      user?.role === 'Student' ? AVATAR_STUDENT_URL : AVATAR_TEACHER_URL;
     return (
       <Avatar
         src={`${url}/${imageName}`}
@@ -121,10 +102,10 @@ function Header(props: any) {
         sx={{ marginRight: 1 }}
       />
     );
-  }, [state]);
+  }, [user]);
   const menuList = useMemo(() => {
-    return state?.role === 'Student' ? menuListStudent : menuListTeacher;
-  }, [state?.role]);
+    return user?.role === 'Student' ? menuListStudent : menuListTeacher;
+  }, [user?.role]);
 
   return (
     <header className={classes.header}>
@@ -154,14 +135,10 @@ function Header(props: any) {
                 );
               })}
             </List>
-            <Tooltip
-              title={<TooltipUser id={state.userId} dispatch={dispatch} />}
-              placement="bottom"
-              arrow
-            >
+            <Tooltip title={<TooltipUser />} placement="bottom" arrow>
               <Box className={classes.menu}>
                 {RenderAvatar}
-                <Typography>{`${state.userInfo?.firstName} ${state.userInfo?.lastName}`}</Typography>
+                <Typography>{`${user?.userInfo?.firstName} ${user?.userInfo?.lastName}`}</Typography>
               </Box>
             </Tooltip>
           </Box>

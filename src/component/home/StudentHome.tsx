@@ -1,23 +1,28 @@
 import { Avatar, Box } from '@mui/material';
-import { useMemo } from 'react';
-
-import { useStore } from '../../store';
+import { useEffect, useMemo } from 'react';
 import avatarStudent from './img/avatarStudent.png';
 import { AVATAR_STUDENT_URL } from '../../constant';
 import DetailStudent from './DetailStudent';
 import DetailPersonal from './DetailPersonal';
+import { useSelector } from 'react-redux';
+import { useAppDispatch } from '../../redux/store';
+import { getUserInfo } from '../../redux/userSlice';
 
 function StudentHome() {
-  const [state, dispatch] = useStore();
-  const student = useMemo(() => {
-    return state.userInfo;
-  }, [state]);
+  const dispatch = useAppDispatch();
+  const user = useSelector((state: any) => state.user.user);
   const imageUrl = useMemo(() => {
-    if (student === null) return avatarStudent;
-    const imageName = student?.image;
+    if (user === null) return avatarStudent;
+    const imageName = user.userInfo?.image;
     if (imageName === undefined) return avatarStudent;
     return `${AVATAR_STUDENT_URL}/${imageName}`;
-  }, [student]);
+  }, [user]);
+
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
+
+  if (user === null) return null;
   return (
     <>
       <Box className="row">
@@ -29,19 +34,19 @@ function StudentHome() {
           />
         </Box>
         <DetailStudent
-          name={`${student?.firstName} ${student?.lastName}`}
-          gender={student?.gender}
-          yearJoin={student?.yearJoin}
-          class={student?.class?.name}
-          teacher={student?.class?.teacher}
-          status={student?.status}
+          name={`${user.userInfo?.firstName} ${user.userInfo?.lastName}`}
+          gender={user.userInfo?.gender}
+          yearJoin={user.userInfo?.yearJoin}
+          class={user.userInfo?.class?.name}
+          teacher={user.userInfo?.class?.teacher}
+          status={user.userInfo?.status}
         />
       </Box>
       <hr></hr>
       <DetailPersonal
-        student={student}
-        father={student?.parents[0]}
-        mother={student?.parents[1]}
+        student={user.userInfo}
+        father={user.userInfo?.parents[0]}
+        mother={user.userInfo?.parents[1]}
       />
     </>
   );

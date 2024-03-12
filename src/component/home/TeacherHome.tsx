@@ -1,9 +1,11 @@
-import { Avatar, Grid, Stack, Typography } from '@mui/material';
+import { Avatar, Grid, Typography } from '@mui/material';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { useStore } from '../../store';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { AVATAR_TEACHER_URL } from '../../constant';
 import Teacher, { defaultTeacher } from '../../interfaces/Teacher';
+import { useSelector } from 'react-redux/es/exports';
+import { useAppDispatch } from '../../redux/store';
+import { getUserInfo } from '../../redux/userSlice';
 
 interface TeacherField {
   id: keyof Teacher;
@@ -34,11 +36,15 @@ const teacherField: TeacherField[] = [
 ];
 
 function TeacherHome() {
-  const [state, dispatch] = useStore();
+  const user = useSelector((state: any) => state.user);
+  const dispatch = useAppDispatch();
   const teacher = useMemo(() => {
-    if (state.userInfo !== null) return state.userInfo;
+    if (user !== null) return user.userInfo;
     return defaultTeacher;
-  }, [state]);
+  }, [user]);
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
   const RenderAvatar = useMemo(() => {
     if (teacher === null)
       return (

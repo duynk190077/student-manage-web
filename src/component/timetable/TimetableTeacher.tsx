@@ -18,7 +18,7 @@ import { defaultTimetable, Timetable } from '../../interfaces/Timetable';
 import Header from '../../templates/header';
 import { authHeader } from '../shared/helper';
 import { BASE_URL, lessons } from '../../constant';
-import { useStore } from '../../store';
+import { useSelector } from 'react-redux';
 
 interface Day {
   field: keyof Timetable;
@@ -54,21 +54,22 @@ const days: Day[] = [
 
 function TimetableTeacher() {
   const classes = useStyles();
-  const [state, dispatch] = useStore();
+  const semester = useSelector((state: any) => state.semester.semester);
+  const user = useSelector((state: any) => state.user.user);
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
   const [timetable1, setTimetable1] = useState<Timetable>(defaultTimetable);
 
   useEffect(() => {
     const fetchAPI = async () => {
-      if (state.userInfo !== null && state.semester !== '') {
+      if (user !== null && semester?.name !== '') {
         try {
           const respone = await axios({
             method: 'post',
-            url: `${BASE_URL}/timetables/teacher/${state.userInfo.id}`,
+            url: `${BASE_URL}/timetables/teacher/${user.id}`,
             headers: authHeader(),
             data: {
-              semester: state.semester,
-              week: state.week,
+              semester: semester?.name,
+              week: semester?.week,
               type: 'Sáng',
             },
           });
@@ -80,19 +81,19 @@ function TimetableTeacher() {
     };
 
     fetchAPI();
-  }, [state]);
+  }, [semester]);
 
   useEffect(() => {
     const fetchAPI = async () => {
-      if (state.userInfo !== null && state.semester !== '') {
+      if (user !== null && semester?.name !== '') {
         try {
           const respone = await axios({
             method: 'post',
-            url: `${BASE_URL}/timetables/teacher/${state.userInfo.id}`,
+            url: `${BASE_URL}/timetables/teacher/${user.id}`,
             headers: authHeader(),
             data: {
-              semester: state.semester,
-              week: state.week,
+              semester: semester?.name,
+              week: semester?.week,
               type: 'Chiều',
             },
           });
@@ -104,7 +105,7 @@ function TimetableTeacher() {
     };
 
     fetchAPI();
-  }, [state]);
+  }, [semester]);
   const getSubjectName = (
     field: keyof Timetable,
     lesson: number,

@@ -23,14 +23,14 @@ import {
   validateTeacher,
 } from '../../shared/helper';
 import CusTextField from '../../shared/TextField';
-import { useStore } from '../../../store';
 import { useParams } from 'react-router-dom';
 import { ParamTypes } from '../../../interfaces/ParamTypes';
+import { useSelector } from 'react-redux';
 
 function TeacherForm() {
   const { id } = useParams<ParamTypes>();
   const classes = useStyle();
-  const [state, dispatch] = useStore();
+  const subjects = useSelector((state: any) => state.subjects.subjects);
   const [teacher, setTeacher] = useState<Teacher>({
     firstName: '',
     lastName: '',
@@ -45,10 +45,10 @@ function TeacherForm() {
   useEffect(() => {
     if (id !== 'Add') {
       axios
-      .get(`${BASE_URL}/teachers/${id}`)
-      .then((respone) => setTeacher(respone.data));
+        .get(`${BASE_URL}/teachers/${id}`)
+        .then((respone) => setTeacher(respone.data));
     }
-  }, [])
+  }, []);
 
   const handleChangeInput =
     (prop: keyof Teacher) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ function TeacherForm() {
   const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault();
     if (!validateTeacher(teacher)) {
-      if ( id === "Add") {
+      if (id === 'Add') {
         const respone = await axios.post(
           `${BASE_URL}/teachers`,
           { ...teacher },
@@ -220,9 +220,9 @@ function TeacherForm() {
                 onChange={handleChangeInput('subject')}
                 sx={{ width: '80%' }}
               >
-                {state.listSubject.map((option: any) => (
-                  <MenuItem key={option} value={option}>
-                    {option}
+                {subjects.map((option: any) => (
+                  <MenuItem key={option} value={option.id}>
+                    {option.name}
                   </MenuItem>
                 ))}
               </TextField>

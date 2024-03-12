@@ -22,29 +22,31 @@ import {
   Timetable,
   TimetableField,
 } from '../../../interfaces/Timetable';
-import { useStore } from '../../../store';
 import AdminDrawer, { DrawerHeader } from '../AdminDrawer';
 import axios from 'axios';
 import { authHeader, getListWeek } from '../../shared/helper';
 import { useParams } from 'react-router-dom';
 import { ParamTypes } from '../../../interfaces/ParamTypes';
+import { useSelector } from 'react-redux';
 
 function TimetableForm() {
   const { id } = useParams<ParamTypes>();
-  const [state, dispatch] = useStore();
+  const semester = useSelector((state: any) => state.semester.semester);
+  console.log(semester);
+  const subjects = useSelector((state: any) => state.subjects.subjects);
   const classes = useStyles();
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
 
   useEffect(() => {
-    if (state.semester !== '')
+    if (semester?.name !== '')
       setTimetable((preState) => {
         return {
           ...preState,
-          semester: state.semester,
-          week: (state.week + 1).toString(),
+          semester: semester?.name,
+          week: (semester?.week + 1).toString(),
         };
       });
-  }, [state]);
+  }, [semester]);
 
   useEffect(() => {
     const fetchAPI = async () => {
@@ -57,7 +59,7 @@ function TimetableForm() {
     if (id !== 'Add') {
       fetchAPI();
     }
-  }, [])
+  }, []);
 
   const timetableField: TimetableField[] = useMemo(() => {
     return [
@@ -74,7 +76,7 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: false,
-        listSelect: getListWeek(state.week),
+        listSelect: getListWeek(semester?.week),
       },
       {
         name: 'Buổi',
@@ -90,7 +92,7 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: false,
-        listSelect: state.listClass,
+        listSelect: subjects.map((e: any) => e.name),
       },
       {
         name: 'Thứ 2',
@@ -98,7 +100,7 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: true,
-        listSelect: state.listSubject,
+        listSelect: subjects.map((e: any) => e.name),
       },
       {
         name: 'Thứ 3',
@@ -106,7 +108,7 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: true,
-        listSelect: state.listSubject,
+        listSelect: subjects.map((e: any) => e.name),
       },
       {
         name: 'Thứ 4',
@@ -114,7 +116,7 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: true,
-        listSelect: state.listSubject,
+        listSelect: subjects.map((e: any) => e.name),
       },
       {
         name: 'Thứ 5',
@@ -122,7 +124,7 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: true,
-        listSelect: state.listSubject,
+        listSelect: subjects.map((e: any) => e.name),
       },
       {
         name: 'Thứ 6',
@@ -130,7 +132,7 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: true,
-        listSelect: state.listSubject,
+        listSelect: subjects.map((e: any) => e.name),
       },
       {
         name: 'Thứ 7',
@@ -138,10 +140,10 @@ function TimetableForm() {
         editable: true,
         select: true,
         multiple: true,
-        listSelect: state.listSubject,
+        listSelect: subjects.map((e: any) => e.name),
       },
     ];
-  }, [state]);
+  }, [subjects, semester]);
 
   const handleChangeInputTimetable =
     (prop: keyof Timetable) => (event: ChangeEvent<HTMLInputElement>) => {

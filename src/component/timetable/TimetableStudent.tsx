@@ -9,16 +9,12 @@ import {
   Table,
   TableBody,
 } from '@mui/material';
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import clsx from 'clsx';
 
-import { BASE_URL } from '../../constant';
 import { defaultTimetable, Timetable } from '../../interfaces/Timetable';
-import { useStore } from '../../store';
 import Header from '../../templates/header';
-import { authHeader } from '../shared/helper';
 import { lessons } from '../../constant';
 
 interface Day {
@@ -55,57 +51,56 @@ const days: Day[] = [
 
 function TimetableStudent() {
   const classes = useStyles();
-  const [state, dispatch] = useStore();
   const [timetable, setTimetable] = useState<Timetable>(defaultTimetable);
   const [timetable1, setTimetable1] = useState<Timetable>(defaultTimetable);
 
-  useEffect(() => {
-    const fetchAPI = async () => {
-      if (state.userInfo !== null && state.semester !== '') {
-        try {
-          const respone = await axios({
-            method: 'post',
-            url: `${BASE_URL}/timetables/${state.userInfo.class.name}`,
-            headers: authHeader(),
-            data: {
-              semester: state.semester,
-              week: state.week,
-              type: 'Sáng',
-            },
-          });
-          setTimetable(respone.data);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchAPI = async () => {
+  //     if (state.userInfo !== null && state.semester !== '') {
+  //       try {
+  //         const respone = await axios({
+  //           method: 'post',
+  //           url: `${BASE_URL}/timetables/${state.userInfo.class.name}`,
+  //           headers: authHeader(),
+  //           data: {
+  //             semester: state.semester,
+  //             week: state.week,
+  //             type: 'Sáng',
+  //           },
+  //         });
+  //         setTimetable(respone.data);
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     }
+  //   };
 
-    fetchAPI();
-  }, [state]);
+  //   fetchAPI();
+  // }, [state]);
 
-  useEffect(() => {
-    const fetchAPI = async () => {
-      if (state.userInfo !== null && state.semester !== '') {
-        try {
-          const respone = await axios({
-            method: 'post',
-            url: `${BASE_URL}/timetables/${state.userInfo.class.name}`,
-            headers: authHeader(),
-            data: {
-              semester: state.semester,
-              week: state.week,
-              type: 'Chiều',
-            },
-          });
-          setTimetable1(respone.data);
-        } catch (err) {
-          console.log(err);
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchAPI = async () => {
+  //     if (state.userInfo !== null && state.semester !== '') {
+  //       try {
+  //         const respone = await axios({
+  //           method: 'post',
+  //           url: `${BASE_URL}/timetables/${state.userInfo.class.name}`,
+  //           headers: authHeader(),
+  //           data: {
+  //             semester: state.semester,
+  //             week: state.week,
+  //             type: 'Chiều',
+  //           },
+  //         });
+  //         setTimetable1(respone.data);
+  //       } catch (err) {
+  //         console.log(err);
+  //       }
+  //     }
+  //   };
 
-    fetchAPI();
-  }, [state]);
+  //   fetchAPI();
+  // }, [state]);
 
   const getSubjectName = (
     field: keyof Timetable,

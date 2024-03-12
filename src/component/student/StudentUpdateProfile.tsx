@@ -29,13 +29,13 @@ import Student, {
 } from '../../interfaces/Student';
 import Header from '../../templates/header';
 import Parent, { defaultParent, ParentField } from '../../interfaces/Parent';
-import { useStore, actions } from '../../store';
 import avatarStudent from '../home/img/avatarStudent.png';
 import { authHeader } from '../shared/helper';
+import { useSelector } from 'react-redux';
 
 function StudentUpdateProfile() {
   const classes = useStyles();
-  const [state, dispatch] = useStore();
+  const user = useSelector((state: any) => state.user.user);
   const [student, SetStudent] = useState<Student | any>(defaultStudent);
   const [father, SetFather] = useState<Parent | any>(defaultParent);
   const [mother, SetMother] = useState<Parent | any>(defaultParent);
@@ -125,14 +125,13 @@ function StudentUpdateProfile() {
   ];
 
   useEffect(() => {
-    if (state.userInfo !== null) {
-      const fullName =
-        state.userInfo?.firstName + ' ' + state.userInfo?.lastName;
-      SetStudent({ ...state.userInfo, fullName });
-      SetFather(state.userInfo?.parents[0]);
-      SetMother(state.userInfo?.parents[1]);
+    if (user !== null) {
+      const fullName = user?.firstName + ' ' + user?.lastName;
+      SetStudent({ ...user, fullName });
+      SetFather(user?.parents[0]);
+      SetMother(user?.parents[1]);
     }
-  }, [state.userInfo]);
+  }, [user]);
 
   const handleChangeInputStudent =
     (prop: keyof Student) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -166,12 +165,6 @@ function StudentUpdateProfile() {
       axios.delete(`${AVATAR_STUDENT_URL}/${student.image}`, {
         headers: authHeader(),
       });
-      dispatch(
-        actions.setState({
-          ...state,
-          userInfo: { ...state.userInfo, image: respone.data },
-        }),
-      );
     } else setError(true);
     setOpen(true);
   };

@@ -30,10 +30,10 @@ import { StudentMark } from '../../interfaces/StudetMark';
 import { MarkTeacher } from '../../interfaces/MarkTeacher';
 import Header from '../../templates/header';
 import { defaultTeacherMark } from '../../interfaces/MarkTeacher';
-import { useStore } from '../../store';
 import axios from 'axios';
 import { BASE_URL } from '../../constant';
 import { authHeader } from '../shared/helper';
+import { useSelector } from 'react-redux';
 
 interface HeadCell {
   id: keyof StudentMark;
@@ -66,7 +66,8 @@ const headCells: HeadCell[] = [
 
 function TeacherMark() {
   const classes = useStyles();
-  const [state, dispatch] = useStore();
+  const semester = useSelector((state: any) => state.semester.semester);
+  const user = useSelector((state: any) => state.user.user);
   const [teacherMarks, setTeacherMarks] = useState<MarkTeacher[]>([
     defaultTeacherMark,
   ]);
@@ -74,10 +75,10 @@ function TeacherMark() {
 
   useEffect(() => {
     const fetchAPI = async () => {
-      if (state.userInfo !== null && state.semester !== '') {
+      if (user !== null && semester?.name !== '') {
         try {
           const respone = await axios.get(
-            `${BASE_URL}/teachers/student-mark/${state.userInfo.id}?semester=${state.semester}`,
+            `${BASE_URL}/teachers/student-mark/${user.id}?semester=${semester?.name}`,
             {
               headers: authHeader(),
             },
@@ -93,7 +94,7 @@ function TeacherMark() {
     };
 
     fetchAPI();
-  }, [state.semester]);
+  }, [semester?.name]);
 
   const RenderColSpan = (field: keyof StudentMark) => {
     if (field === 'fullName' || field === 'factor3') return 1;

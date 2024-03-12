@@ -26,13 +26,13 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { AVATAR_TEACHER_URL, BASE_URL, listGender } from '../../constant';
 import Teacher, { defaultTeacher } from '../../interfaces/Teacher';
-import { actions, useStore } from '../../store';
 import Header from '../../templates/header';
 import axios from 'axios';
 import { authHeader } from '../shared/helper';
 import { makeStyles } from '@mui/styles';
 import { DesktopDatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { useSelector } from 'react-redux';
 
 interface TeacherField {
   id: keyof Teacher;
@@ -64,14 +64,14 @@ const teacherField: TeacherField[] = [
 
 function TeacherUpdateProfile() {
   const classes = useStyles();
-  const [state, dispatch] = useStore();
+  const user = useSelector((state: any) => state.user.user);
   const [teacher, setTeacher] = useState<Teacher>(defaultTeacher);
   const [error, setError] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
   useEffect(() => {
-    if (state.userInfo !== null) setTeacher(state.userInfo);
-  }, [state.userInfo]);
+    if (user !== null) setTeacher(user);
+  }, [user]);
 
   const handleChangeInputTeacher =
     (prop: keyof Teacher) => (event: ChangeEvent<HTMLInputElement>) => {
@@ -99,12 +99,6 @@ function TeacherUpdateProfile() {
           headers: authHeader(),
         });
       }
-      dispatch(
-        actions.setState({
-          ...state,
-          userInfo: { ...state.userInfo, image: respone.data },
-        }),
-      );
     } else setError(true);
     setOpen(true);
   };

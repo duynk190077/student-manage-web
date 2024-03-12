@@ -1,15 +1,15 @@
 import { Box, Typography } from '@mui/material';
 import { useMemo } from 'react';
-import { useStore } from '../../store';
+import LocalStorage from '../../service/LocalStorage';
 import Header from '../../templates/header';
 import StudentHome from './StudentHome';
 import TeacherHome from './TeacherHome';
 
 export default function Home() {
-  const [state, dispatch] = useStore();
   const role = useMemo(() => {
-    return state?.role;
-  }, [state]);
+    return LocalStorage.getRole();
+  }, []);
+  console.log(role);
   return (
     <>
       <Header id={0} />

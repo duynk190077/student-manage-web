@@ -15,10 +15,10 @@ import { makeStyles } from '@mui/styles';
 import { defaultStudentMark, StudentMark } from '../../interfaces/StudetMark';
 import Header from '../../templates/header';
 import clsx from 'clsx';
-import { useStore } from '../../store';
 import axios from 'axios';
 import { BASE_URL } from '../../constant';
 import { authHeader } from '../shared/helper';
+import { useSelector } from 'react-redux';
 
 interface HeadCell {
   id: keyof StudentMark;
@@ -46,18 +46,19 @@ const headCells: HeadCell[] = [
 
 function StudentMarks() {
   const classes = useStyles();
-  const [state, dispatch] = useStore();
+  const semester = useSelector((state: any) => state.semester.semester);
+  const user = useSelector((state: any) => state.user.user);
   const [studentMarks, setStudentMarks] = useState<StudentMark[]>([
     defaultStudentMark,
   ]);
 
   useEffect(() => {
     const fetchAPI = async () => {
-      if (state.userInfo !== null && state.semester !== '') {
+      if (user !== null && semester?.name !== '') {
         try {
           const respone = await axios({
             method: 'get',
-            url: `${BASE_URL}/student-marks/student/${state.userInfo._id}?semester=${state.semester}`,
+            url: `${BASE_URL}/student-marks/student/${user._id}?semester=${semester?.name}`,
             headers: authHeader(),
           });
           if (respone.data !== false) setStudentMarks(respone.data);
@@ -68,7 +69,7 @@ function StudentMarks() {
     };
 
     fetchAPI();
-  }, [state.semester]);
+  }, [semester?.name]);
 
   const RenderColSpan = (field: keyof StudentMark) => {
     if (field === 'subject' || field === 'factor3') return 1;

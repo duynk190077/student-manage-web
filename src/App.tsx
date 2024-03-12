@@ -17,6 +17,9 @@ function App() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (!auth) {
+      return;
+    }
     dispatch(getAllSubjects());
     dispatch(getSemesterInfo());
     dispatch(getAllClassRooms());
